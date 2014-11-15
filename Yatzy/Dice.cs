@@ -5,53 +5,32 @@ using System.Linq;
 
 namespace Yatzy
 {
-  sealed class Probability
-  {
-    private readonly bool[] diceToRoll = new bool[5];
-    private double probability;
-
-    public bool[] DiceToRoll { get { return diceToRoll; } }
-    public double Probability { get { return probability; } }
-
-    public void Calculate(DiceState currentState, DiceState desiredState)
-    {
-      CalculateDiceToRoll(currentState, desiredState);
-      CalculateProbability(currentState, desiredState);
-    }
-
-    private void CalculateDiceToRoll(DiceState currentState, DiceState desiredState)
-    {
-      for (int i = 0; i < 5; ++i)
-        diceToRoll[i] = currentState[i] != desiredState[i];
-    }
-
-    private void CalculateProbability(DiceState currentState, DiceState desiredState)
-    {
-      throw new NotImplementedException();
-    }
-  }
-
   abstract class DiceState
   {
-    private readonly int[] dice = new int[5];
+    protected readonly int[] dice = new int[5];
+    private readonly int[] counts = new int[6];
 
-    public int Score
-    {
-      get { return dice.Sum(); }
+    protected delegate void StateModifier();
+
+    protected void SetState(StateModifier stateModifier) {
+      stateModifier();
+
+      for (int i = 0; i < 6; ++i)
+        counts[i] = 0;
+
+      for (int i = 0; i < 5; ++i) {
+        Debug.Assert(dice[i] >= 1 && dice[i] <= 6);
+        ++counts[dice[i]-1];
+      }
     }
 
-    public int this[int i]
-    {
-      get
-      {
-        return dice[i];
-      }
-      
-      protected set
-      {
-        Debug.Assert(value >= 0 && value <= 6);
-        dice[i] = value;
-      }
+    public int this[int i] {
+      get { return dice[i]; }
+    }
+
+    public int GetValueCount(int value) {
+      Debug.Assert(value >= 1 && value <= 6);
+      return counts[value-1];
     }
   }
 
@@ -59,32 +38,43 @@ namespace Yatzy
   {
     private readonly Random[] random = new Random[5];
 
-    public RollingDice(int seed)
-    {
+    public RollingDice(int seed) {
       for (int i = 0; i < 5; ++i)
         random[i] = new Random(seed + i);
     }
 
-    public void Roll(bool[] isRoll)
-    {
-      for (int i = 0; i < 5; ++i)
-        if (isRoll[i])
-          this[i] = 1 + random[i].Next(6);
+    public void Roll(bool[] diceToHold) {
+      SetState(() => {
+        for (int i = 0; i < 5; ++i)
+          if (!diceToHold[i])
+            dice[i] = 1 + random[i].Next(6);
+      });
     }
   }
 
-  abstract class DiceTarget : DiceState
+  abstract class DiceEvaluator : DiceState
   {
-    private Probability probability = new Probability();
-    protected abstract void SetTargetState(DiceState currentState);
+    private readonly bool[] diceToHold = new bool[5];
+    private double probability;
 
+    abstract protected void SetTargetState(DiceState currentState, int throwsLeft);
     public virtual string Name { get { return GetType().Name; } }
+    public abstract int PotentialScore { get; }
+    public bool[] DiceToHold { get { return diceToHold; } }
+    public double Probability { get { return probability; } }
 
-    public sealed Probability CalculateProbability(DiceState currentState)
-    {
-      SetTargetState(currentState);
-      probability.Calculate(currentState, this);
-      return probability;
+    public void EvaluateState(DiceState currentState, int throwsLeft) {
+      Debug.Assert(throwsLeft == 1 || throwsLeft == 2);
+      SetState(() => SetTargetState(currentState, throwsLeft));
+      CalculateDiceToHold(currentState);
+
+    }
+
+    public abstract int ActualScore(DiceState currentState);
+
+    private void CalculateDiceToHold(DiceState currentState) {
+      for (int i = 0; i < 5; ++i)
+        diceToHold[i] = currentState[i] == this[i];
     }
   }
 }
