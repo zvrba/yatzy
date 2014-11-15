@@ -30,34 +30,50 @@ namespace Yatzy
     }
   }
 
-  class OnesEvaluator : FixedNumberEvaluator
+  sealed class OnesEvaluator : FixedNumberEvaluator
   {
     OnesEvaluator() : base(1) { }
   }
 
-  class TwosEvaluator : FixedNumberEvaluator
+  sealed class TwosEvaluator : FixedNumberEvaluator
   {
     TwosEvaluator() : base(2) { }
   }
 
-  class ThreesEvaluator : FixedNumberEvaluator
+  sealed class ThreesEvaluator : FixedNumberEvaluator
   {
     ThreesEvaluator() : base(3) { }
   }
 
-  class FoursEvaluator : FixedNumberEvaluator
+  sealed class FoursEvaluator : FixedNumberEvaluator
   {
     FoursEvaluator() : base(4) { }
   }
 
-  class FivesEvaluator : FixedNumberEvaluator
+  sealed class FivesEvaluator : FixedNumberEvaluator
   {
     FivesEvaluator() : base(5) { }
   }
 
-  class SixesEvaluator : FixedNumberEvaluator
+  sealed class SixesEvaluator : FixedNumberEvaluator
   {
     SixesEvaluator() : base(6) { }
   }
-}
 
+  sealed class YatziEvaluator : DiceEvaluator
+  {
+    public override int PotentialScore { get { return 50; } }
+
+    protected override void SetTargetState(DiceState currentState, int throwsLeft) {
+      int maxCount = currentState.Counts.Max();
+      int maxValue = Array.IndexOf(currentState.Counts, maxCount);
+
+      for (int i = 0; i < 5; ++i)
+        dice[i] = maxValue;
+    }
+
+    public override int ActualScore(DiceState currentState) {
+      return counts.Any(x => x==5) ? 50 : 0;
+    }
+  }
+}

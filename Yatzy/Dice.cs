@@ -8,30 +8,24 @@ namespace Yatzy
   abstract class DiceState
   {
     protected readonly int[] dice = new int[5];
-    private readonly int[] counts = new int[6];
+    protected readonly int[] counts = new int[7];
 
     protected delegate void StateModifier();
 
     protected void SetState(StateModifier stateModifier) {
       stateModifier();
 
-      for (int i = 0; i < 6; ++i)
+      for (int i = 0; i < 7; ++i)
         counts[i] = 0;
 
       for (int i = 0; i < 5; ++i) {
         Debug.Assert(dice[i] >= 1 && dice[i] <= 6);
-        ++counts[dice[i]-1];
+        ++counts[dice[i]];
       }
     }
 
-    public int this[int i] {
-      get { return dice[i]; }
-    }
-
-    public int GetValueCount(int value) {
-      Debug.Assert(value >= 1 && value <= 6);
-      return counts[value-1];
-    }
+    public int this[int i] { get { return dice[i]; } }
+    public int[] Counts { get { return counts; } }
   }
 
   sealed class RollingDice : DiceState
@@ -55,13 +49,12 @@ namespace Yatzy
   abstract class DiceEvaluator : DiceState
   {
     private readonly bool[] diceToHold = new bool[5];
-    private double probability;
 
-    abstract protected void SetTargetState(DiceState currentState, int throwsLeft);
+    protected abstract void SetTargetState(DiceState currentState, int throwsLeft);
     public virtual string Name { get { return GetType().Name; } }
     public abstract int PotentialScore { get; }
     public bool[] DiceToHold { get { return diceToHold; } }
-    public double Probability { get { return probability; } }
+    //public double Probability { get { return probability; } }
 
     public void EvaluateState(DiceState currentState, int throwsLeft) {
       Debug.Assert(throwsLeft == 1 || throwsLeft == 2);
