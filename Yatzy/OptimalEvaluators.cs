@@ -24,7 +24,7 @@ namespace Yatzy
     public sealed override int ActualScore(DiceState currentState) {
       int sum = 0;
       for (int i = 0; i < 5; ++i)
-        if (currentState[i] == number)
+        if (currentState.Values[i] == number)
           sum += number;
       return sum;
     }
@@ -66,7 +66,7 @@ namespace Yatzy
 
     protected override void SetTargetState(DiceState currentState, int throwsLeft) {
       int maxCount = currentState.Counts.Max();
-      int maxValue = Array.IndexOf(currentState.Counts, maxCount);
+      int maxValue = currentState.Counts.IndexOf(maxCount);
 
       for (int i = 0; i < 5; ++i)
         dice[i] = maxValue;
