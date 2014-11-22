@@ -34,9 +34,9 @@ namespace Yatzy
         random[i] = new Random(seed + i);
     }
 
-    public void Roll(bool[] diceToHold) {
+    public void Roll(bool[] diceToHold = null) {
       for (int i = 0; i < 5; ++i)
-        if (!diceToHold[i])
+        if (diceToHold == null || !diceToHold[i])
           dice[i] = 1 + random[i].Next(6);
       
       OnDiceChanged();

@@ -42,7 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dice.cs" />
-    <Compile Include="OptimalEvaluators.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="GreedyEvaluators.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

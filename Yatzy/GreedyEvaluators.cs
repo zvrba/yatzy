@@ -22,11 +22,7 @@ namespace Yatzy
     }
 
     public sealed override int ActualScore(DiceState currentState) {
-      int sum = 0;
-      for (int i = 0; i < 5; ++i)
-        if (currentState.Values[i] == number)
-          sum += number;
-      return sum;
+      return currentState.Counts[number] * number;
     }
   }
 
@@ -76,4 +72,5 @@ namespace Yatzy
       return counts.Any(x => x==5) ? 50 : 0;
     }
   }
+
 }
