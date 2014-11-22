@@ -10,8 +10,10 @@ namespace Yatzy
   {
     protected readonly int[] dice = new int[5];
     protected readonly int[] counts = new int[7];
+    private delegate void StateSetter();
 
-    protected void OnDiceChanged() {
+    private void UpdateCounts()
+    {
       for (int i = 0; i < 7; ++i)
         counts[i] = 0;
 
@@ -19,6 +21,12 @@ namespace Yatzy
         Debug.Assert(dice[i] >= 1 && dice[i] <= 6);
         ++counts[dice[i]];
       }
+    }
+
+    protected void SetState(StateSetter setter) 
+    {
+      setter();
+      UpdateCounts();
     }
 
     public ReadOnlyCollection<int> Values { get { return Array.AsReadOnly(dice); } }
@@ -35,36 +43,41 @@ namespace Yatzy
     }
 
     public void Roll(bool[] diceToHold = null) {
-      for (int i = 0; i < 5; ++i)
-        if (diceToHold == null || !diceToHold[i])
-          dice[i] = 1 + random[i].Next(6);
-      
-      OnDiceChanged();
+      SetState(() => {
+        for (int i = 0; i < 5; ++i)
+          if (diceToHold == null || !diceToHold[i])
+            dice[i] = 1 + random[i].Next(6);
+      });
     }
   }
 
   abstract class DiceEvaluator : DiceState
   {
     private readonly bool[] diceToHold = new bool[5];
+    private double probability;
 
-    protected abstract void SetTargetState(DiceState currentState, int throwsLeft);
     public abstract int PotentialScore { get; }
-    public abstract int ActualScore(DiceState currentState);
-
+    public abstract int ActualScore { get; }
     public virtual string Name { get { return GetType().Name; } }
     public bool[] DiceToHold { get { return diceToHold; } }
-    //public double Probability { get { return probability; } }
+    public double Probability { get { return probability; } }
+
+    protected abstract void SetTargetState(DiceState currentState, int throwsLeft);
 
     public void EvaluateState(DiceState currentState, int throwsLeft) {
-      Debug.Assert(throwsLeft == 1 || throwsLeft == 2);
-      SetTargetState(currentState, throwsLeft);
-      OnDiceChanged();
+      Debug.Assert(throwsLeft == 0 || throwsLeft == 1 || throwsLeft == 2);
+      SetState(() => SetTargetState(currentState, throwsLeft));
       CalculateDiceToHold(currentState);
+      probability = CalculateProbability(currentState);
     }
 
     private void CalculateDiceToHold(DiceState currentState) {
       for (int i = 0; i < 5; ++i)
         diceToHold[i] = currentState.Values[i] == Values[i];
+    }
+
+    private double CalculateProbability(DiceState currentState, int throwsLeft) {
+      return 0;
     }
   }
 }

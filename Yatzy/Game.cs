@@ -14,6 +14,7 @@ namespace Yatzy
     public int[] Scores { get { return scores; } }
 
     protected AbstractGame(int seed, DiceEvaluator[] evaluators) {
+      seed = (seed+1) * 1711; // Ensure not zero
       this.dice = new RollingDice(seed);
       this.evaluators = evaluators;
       this.scores = new int[evaluators.Length];
