@@ -5,6 +5,33 @@ using System.Linq;
 
 namespace Yatzy
 {
+  // Concrete evaluator factory, if we ever have multiple strategies.
+  static class GreedyEvaluators
+  {
+    // NB! Ordering is important for the forced game.
+    private static DiceEvaluator[] evaluators = new DiceEvaluator[]{
+      new OnesEvaluator(),
+      new TwosEvaluator(),
+      new ThreesEvaluator(),
+      new FoursEvaluator(),
+      new FivesEvaluator(),
+      new SixesEvaluator(),
+      new OnePairEvaluator(),
+      new TwoPairsEvaluator(),
+      new ThreeOfAKindEvaluator(),
+      new FourOfAKindEvaluator(),
+      new SmallStraightEvaluator(),
+      new LargeStraightEvaluator(),
+      new HouseEvaluator(),
+      new ChanceEvaluator(),
+      new YatziEvaluator()
+    };
+
+    public static DiceEvaluator[] GetEvaluators() {
+      return evaluators;
+    }
+  }
+
   abstract class FixedNumberEvaluator : DiceEvaluator
   {
     private readonly int number;
@@ -28,32 +55,88 @@ namespace Yatzy
 
   sealed class OnesEvaluator : FixedNumberEvaluator
   {
-    OnesEvaluator() : base(1) { }
+    public OnesEvaluator() : base(1) { }
   }
 
   sealed class TwosEvaluator : FixedNumberEvaluator
   {
-    TwosEvaluator() : base(2) { }
+    public TwosEvaluator() : base(2) { }
   }
 
   sealed class ThreesEvaluator : FixedNumberEvaluator
   {
-    ThreesEvaluator() : base(3) { }
+    public ThreesEvaluator() : base(3) { }
   }
 
   sealed class FoursEvaluator : FixedNumberEvaluator
   {
-    FoursEvaluator() : base(4) { }
+    public FoursEvaluator() : base(4) { }
   }
 
   sealed class FivesEvaluator : FixedNumberEvaluator
   {
-    FivesEvaluator() : base(5) { }
+    public FivesEvaluator() : base(5) { }
   }
 
   sealed class SixesEvaluator : FixedNumberEvaluator
   {
-    SixesEvaluator() : base(6) { }
+    public SixesEvaluator() : base(6) { }
+  }
+
+  // Dummy class with default implementations.
+  abstract class PlaceholderEvaluator : DiceEvaluator
+  {
+    public override int PotentialScore {
+      get { throw new NotImplementedException(); }
+    }
+
+    protected void SetTargetState(DiceState currentState, int throwsLeft) {
+      throw new NotImplementedException();
+    }
+
+    public override int ActualScore(DiceState currentState) {
+      throw new NotImplementedException();
+    }
+  }
+
+  sealed class OnePairEvaluator : PlaceholderEvaluator
+  {
+
+  }
+
+  sealed class TwoPairsEvaluator : PlaceholderEvaluator
+  {
+
+  }
+
+  sealed class ThreeOfAKindEvaluator : PlaceholderEvaluator
+  {
+
+  }
+
+  sealed class FourOfAKindEvaluator : PlaceholderEvaluator
+  {
+
+  }
+
+  sealed class SmallStraightEvaluator : PlaceholderEvaluator
+  {
+
+  }
+
+  sealed class LargeStraightEvaluator : PlaceholderEvaluator
+  {
+
+  }
+
+  sealed class HouseEvaluator : PlaceholderEvaluator
+  {
+
+  }
+
+  sealed class ChanceEvaluator : PlaceholderEvaluator
+  {
+
   }
 
   sealed class YatziEvaluator : DiceEvaluator
@@ -72,5 +155,4 @@ namespace Yatzy
       return counts.Any(x => x==5) ? 50 : 0;
     }
   }
-
 }
