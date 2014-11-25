@@ -36,8 +36,6 @@ namespace Yatzy
   {
     private readonly int number;
 
-    public sealed override int PotentialScore { get { return 5*number; } }
-
     protected FixedNumberEvaluator(int number) {
       Debug.Assert(number >= 1 && number <= 6);
       this.number = number;
@@ -48,7 +46,11 @@ namespace Yatzy
         dice[i] = number;
     }
 
-    public sealed override int ActualScore(DiceState currentState) {
+    protected sealed override int CalculatePotentialScore(DiceState currentState) {
+      return 5*number;
+    }
+
+    protected sealed override int CalculateActualScore(DiceState currentState) {
       return currentState.Counts[number] * number;
     }
   }
@@ -86,15 +88,15 @@ namespace Yatzy
   // Dummy class with default implementations.
   abstract class PlaceholderEvaluator : DiceEvaluator
   {
-    public override int PotentialScore {
-      get { throw new NotImplementedException(); }
-    }
-
-    protected void SetTargetState(DiceState currentState, int throwsLeft) {
+    protected override void SetTargetState(DiceState currentState, int throwsLeft) {
       throw new NotImplementedException();
     }
 
-    public override int ActualScore(DiceState currentState) {
+    protected override int CalculatePotentialScore(DiceState currentState) {
+      throw new NotImplementedException();
+    }
+
+    protected override int CalculateActualScore(DiceState currentState) {
       throw new NotImplementedException();
     }
   }
@@ -141,8 +143,6 @@ namespace Yatzy
 
   sealed class YatziEvaluator : DiceEvaluator
   {
-    public override int PotentialScore { get { return 50; } }
-
     protected override void SetTargetState(DiceState currentState, int throwsLeft) {
       int maxCount = currentState.Counts.Max();
       int maxValue = currentState.Counts.IndexOf(maxCount);
@@ -151,8 +151,12 @@ namespace Yatzy
         dice[i] = maxValue;
     }
 
-    public override int ActualScore(DiceState currentState) {
-      return counts.Any(x => x==5) ? 50 : 0;
+    protected override int CalculatePotentialScore(DiceState currentState) {
+      return 50;
+    }
+
+    protected override int CalculateActualScore(DiceState currentState) {
+      return this.Counts.Any(x => x==5) ? 50 : 0;
     }
   }
 }

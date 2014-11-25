@@ -6,14 +6,33 @@ using System.Linq;
 
 namespace Yatzy
 {
+  /// <summary>
+  /// This exposes an immutable view of dice values and counts of each value.
+  /// </summary>
   abstract class DiceState
   {
-    protected readonly int[] dice = new int[5];
-    protected readonly int[] counts = new int[7];
-    private delegate void StateSetter();
+    public ReadOnlyCollection<int> Values { get { return roDice; } }
+    public ReadOnlyCollection<int> Counts { get { return roCounts; } }
 
-    private void UpdateCounts()
+    protected readonly int[] dice = new int[5];
+    private readonly int[] counts = new int[7];
+    private readonly ReadOnlyCollection<int> roDice;
+    private readonly ReadOnlyCollection<int> roCounts;
+
+    protected DiceState() {
+      roDice = Array.AsReadOnly(dice);
+      roCounts = Array.AsReadOnly(counts);
+    }
+
+    protected delegate void StateSetter();
+
+    protected void SetState(StateSetter setter) 
     {
+      setter();
+      UpdateCounts();
+    }
+
+    private void UpdateCounts() {
       for (int i = 0; i < 7; ++i)
         counts[i] = 0;
 
@@ -22,15 +41,6 @@ namespace Yatzy
         ++counts[dice[i]];
       }
     }
-
-    protected void SetState(StateSetter setter) 
-    {
-      setter();
-      UpdateCounts();
-    }
-
-    public ReadOnlyCollection<int> Values { get { return Array.AsReadOnly(dice); } }
-    public ReadOnlyCollection<int> Counts { get { return Array.AsReadOnly(counts); } }
   }
 
   sealed class RollingDice : DiceState
@@ -54,30 +64,37 @@ namespace Yatzy
   abstract class DiceEvaluator : DiceState
   {
     private readonly bool[] diceToHold = new bool[5];
+    private int potentialScore;
     private double probability;
+    private int actualScore;
 
-    public abstract int PotentialScore { get; }
-    public abstract int ActualScore { get; }
-    public virtual string Name { get { return GetType().Name; } }
-    public bool[] DiceToHold { get { return diceToHold; } }
+    public int PotentialScore { get { return potentialScore; } }
     public double Probability { get { return probability; } }
-
-    protected abstract void SetTargetState(DiceState currentState, int throwsLeft);
+    public int ActualScore { get { return actualScore; } }
+    public bool[] DiceToHold { get { return diceToHold; } }
+    public virtual string Name { get { return GetType().Name; } }
 
     public void EvaluateState(DiceState currentState, int throwsLeft) {
       Debug.Assert(throwsLeft == 0 || throwsLeft == 1 || throwsLeft == 2);
       SetState(() => SetTargetState(currentState, throwsLeft));
+      
       CalculateDiceToHold(currentState);
-      probability = CalculateProbability(currentState);
+      CalculateProbability(currentState, throwsLeft);
+      potentialScore = CalculatePotentialScore(currentState);
+      actualScore = CalculateActualScore(currentState);
     }
+
+    protected abstract void SetTargetState(DiceState currentState, int throwsLeft);
+    protected abstract int CalculatePotentialScore(DiceState currentState);
+    protected abstract int CalculateActualScore(DiceState currentState);
 
     private void CalculateDiceToHold(DiceState currentState) {
       for (int i = 0; i < 5; ++i)
         diceToHold[i] = currentState.Values[i] == Values[i];
     }
 
-    private double CalculateProbability(DiceState currentState, int throwsLeft) {
-      return 0;
+    private void CalculateProbability(DiceState currentState, int throwsLeft) {
+      probability = 0;
     }
   }
 }
