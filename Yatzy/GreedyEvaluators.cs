@@ -136,9 +136,24 @@ namespace Yatzy
 
   }
 
-  sealed class ChanceEvaluator : PlaceholderEvaluator
+  sealed class ChanceEvaluator : DiceEvaluator
   {
+    // Expected value of a single throw is 3.5, so don't re-roll dice >= 4
+    protected override void SetTargetState(DiceState currentState, int throwsLeft) {
+      for (int i = 0; i < 5; ++i)
+        if (currentState.Values[i] < 4)
+          dice[i] = 6;
+        else
+          dice[i] = currentState.Values[i];
+    }
 
+    protected override int CalculatePotentialScore(DiceState currentState) {
+      return dice.Sum();
+    }
+
+    protected override int CalculateActualScore(DiceState currentState) {
+      return currentState.Values.Sum();
+    }
   }
 
   sealed class YatziEvaluator : DiceEvaluator
