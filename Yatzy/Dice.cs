@@ -63,6 +63,7 @@ namespace Yatzy
 
   abstract class DiceEvaluator : DiceState
   {
+    protected DiceState currentState;
     private readonly bool[] diceToHold = new bool[5];
     private int potentialScore;
     private double probability;
@@ -76,24 +77,28 @@ namespace Yatzy
 
     public void EvaluateState(DiceState currentState, int throwsLeft) {
       Debug.Assert(throwsLeft == 0 || throwsLeft == 1 || throwsLeft == 2);
-      SetState(() => SetTargetState(currentState, throwsLeft));
+
+      this.currentState = currentState;
+
+      SetState(() => SetTargetState(throwsLeft));
       
-      CalculateDiceToHold(currentState);
-      CalculateProbability(currentState, throwsLeft);
-      potentialScore = CalculatePotentialScore(currentState);
-      actualScore = CalculateActualScore(currentState);
+      CalculateDiceToHold();
+      CalculateProbability(throwsLeft);
+      potentialScore = CalculatePotentialScore();
+      actualScore = CalculateActualScore();
     }
 
-    protected abstract void SetTargetState(DiceState currentState, int throwsLeft);
-    protected abstract int CalculatePotentialScore(DiceState currentState);
-    protected abstract int CalculateActualScore(DiceState currentState);
 
-    private void CalculateDiceToHold(DiceState currentState) {
+    protected abstract void SetTargetState(int throwsLeft);
+    protected abstract int CalculatePotentialScore();
+    protected abstract int CalculateActualScore();
+
+    private void CalculateDiceToHold() {
       for (int i = 0; i < 5; ++i)
         diceToHold[i] = currentState.Values[i] == Values[i];
     }
 
-    private void CalculateProbability(DiceState currentState, int throwsLeft) {
+    private void CalculateProbability(int throwsLeft) {
       probability = 0;
     }
   }
