@@ -6,6 +6,7 @@ using System.Linq;
 namespace Yatzy
 {
   // Concrete evaluator factory, if we ever have multiple strategies.
+  // Greedy stragegy just accepts the first non-zero score, regardless of the probability of winning a higher score.
   static class GreedyEvaluators
   {
     // NB! Ordering is important for the forced game.
@@ -103,7 +104,6 @@ namespace Yatzy
 
   sealed class OnePairEvaluator : PlaceholderEvaluator
   {
-
   }
 
   sealed class TwoPairsEvaluator : PlaceholderEvaluator

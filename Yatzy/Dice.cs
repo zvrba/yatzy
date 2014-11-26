@@ -52,11 +52,20 @@ namespace Yatzy
         random[i] = new Random(seed + i);
     }
 
+    /// <summary>
+    /// Roll the dice. Sorts the result after rolling for easier evaluation afterwards.
+    /// </summary>
+    /// <param name="diceToHold">
+    /// Dice corresponding to false values in the array are not rolled.
+    /// When null, all dice are rolled.
+    /// </param>
     public void Roll(bool[] diceToHold = null) {
       SetState(() => {
-        for (int i = 0; i < 5; ++i)
+        for (int i = 0; i < 5; ++i) {
           if (diceToHold == null || !diceToHold[i])
             dice[i] = 1 + random[i].Next(6);
+        }
+        Array.Sort(dice);
       });
     }
   }
