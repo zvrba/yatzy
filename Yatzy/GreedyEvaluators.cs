@@ -47,12 +47,8 @@ namespace Yatzy
         dice[i] = number;
     }
 
-    protected sealed override int CalculatePotentialScore() {
-      return 5*number;
-    }
-
-    protected sealed override int CalculateActualScore() {
-      return currentState.Counts[number] * number;
+    protected sealed override int CalculateScore() {
+      return ScoreCalculator.FixedNumber(this, number);
     }
   }
 
@@ -93,18 +89,22 @@ namespace Yatzy
       throw new NotImplementedException();
     }
 
-    protected override int CalculatePotentialScore() {
-      throw new NotImplementedException();
-    }
-
-    protected override int CalculateActualScore() {
+    protected override int CalculateScore() {
       throw new NotImplementedException();
     }
   }
 
-  sealed class OnePairEvaluator : PlaceholderEvaluator
+  sealed class OnePairEvaluator : DiceEvaluator
   {
+    protected override void SetTargetState(int throwsLeft) {
+      dice[3] = dice[4];
+      for (int i = 0; i < 3; ++i)
+        dice[i] = 6;
+    }
 
+    protected override int CalculateScore() {
+      return ScoreCalculator.NOfAKind(this, 2);
+    }
   }
 
   sealed class TwoPairsEvaluator : PlaceholderEvaluator
@@ -142,37 +142,27 @@ namespace Yatzy
     // Expected value of a single throw is 3.5, so don't re-roll dice >= 4
     protected override void SetTargetState(int throwsLeft) {
       for (int i = 0; i < 5; ++i)
-        if (currentState.Values[i] < 4)
+        if (dice[i] < 4)
           dice[i] = 6;
-        else
-          dice[i] = currentState.Values[i];
     }
 
-    protected override int CalculatePotentialScore() {
-      return dice.Sum();
-    }
-
-    protected override int CalculateActualScore() {
-      return currentState.Values.Sum();
+    protected override int CalculateScore() {
+      return ScoreCalculator.Chance(this);
     }
   }
 
   sealed class YatziEvaluator : DiceEvaluator
   {
     protected override void SetTargetState(int throwsLeft) {
-      int maxCount = currentState.Counts.Max();
-      int maxValue = currentState.Counts.IndexOf(maxCount);
+      int maxCount = Counts.Max();
+      int maxValue = Counts.IndexOf(maxCount);
 
       for (int i = 0; i < 5; ++i)
         dice[i] = maxValue;
     }
 
-    protected override int CalculatePotentialScore() {
-      return 50;
-    }
-
-    protected override int CalculateActualScore() {
-      return this.Counts.Any(x => x==5) ? 50 : 0;
+    protected override int CalculateScore() {
+      return ScoreCalculator.Yatzi(this);
     }
   }
 }

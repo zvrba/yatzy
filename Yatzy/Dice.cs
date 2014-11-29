@@ -73,43 +73,36 @@ namespace Yatzy
 
   abstract class DiceEvaluator : DiceState
   {
-    protected DiceState currentState;
     private readonly bool[] diceToHold = new bool[5];
-    private int potentialScore;
-    private double probability;
-    private int actualScore;
+    private int score;
 
-    public int PotentialScore { get { return potentialScore; } }
-    public double Probability { get { return probability; } }
-    public int ActualScore { get { return actualScore; } }
+    public int Score { get { return score; } }
     public bool[] DiceToHold { get { return diceToHold; } }
     public virtual string Name { get { return GetType().Name; } }
 
     public void EvaluateState(DiceState currentState, int throwsLeft) {
       Debug.Assert(throwsLeft == 0 || throwsLeft == 1 || throwsLeft == 2);
 
-      this.currentState = currentState;
+      for (int i = 0; i < 5; ++i)
+        dice[i] = currentState.Values[i];
 
-      SetState(() => SetTargetState(throwsLeft));
-      
-      CalculateDiceToHold();
-      CalculateProbability(throwsLeft);
-      potentialScore = CalculatePotentialScore();
-      actualScore = CalculateActualScore();
+      if (throwsLeft > 0) {
+        SetState(() => SetTargetState(throwsLeft));
+        CalculateDiceToHold(currentState);
+      }
+
+      score = CalculateScore();
     }
 
+    /// <summary>
+    ///  Called with the current state in dice[].
+    /// </summary>
     protected abstract void SetTargetState(int throwsLeft);
-    protected abstract int CalculatePotentialScore();
-    protected abstract int CalculateActualScore();
+    protected abstract int CalculateScore();
 
-    private void CalculateDiceToHold() {
+    private void CalculateDiceToHold(DiceState currentState) {
       for (int i = 0; i < 5; ++i)
         diceToHold[i] = currentState.Values[i] == Values[i];
-    }
-
-    // Not used ATM, we have only greedy strategy.
-    private void CalculateProbability(int throwsLeft) {
-      probability = 0;
     }
   }
 }

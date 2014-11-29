@@ -53,7 +53,7 @@ namespace Yatzy
       de = ChooseEvaluator(0);
       Debug.Assert(scores[de] == -1, "already used evaluator");
 
-      scores[de] = evaluators[de].ActualScore;
+      scores[de] = evaluators[de].Score;
     }
   }
 }
