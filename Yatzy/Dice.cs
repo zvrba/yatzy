@@ -30,6 +30,7 @@ namespace Yatzy
     {
       setter();
       UpdateCounts();
+      Debug.Assert(counts.Sum() == 5);
     }
 
     private void UpdateCounts() {
@@ -97,7 +98,6 @@ namespace Yatzy
       actualScore = CalculateActualScore();
     }
 
-
     protected abstract void SetTargetState(int throwsLeft);
     protected abstract int CalculatePotentialScore();
     protected abstract int CalculateActualScore();
@@ -107,6 +107,7 @@ namespace Yatzy
         diceToHold[i] = currentState.Values[i] == Values[i];
     }
 
+    // Not used ATM, we have only greedy strategy.
     private void CalculateProbability(int throwsLeft) {
       probability = 0;
     }

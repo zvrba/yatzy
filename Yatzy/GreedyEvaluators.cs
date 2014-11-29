@@ -104,6 +104,7 @@ namespace Yatzy
 
   sealed class OnePairEvaluator : PlaceholderEvaluator
   {
+
   }
 
   sealed class TwoPairsEvaluator : PlaceholderEvaluator
