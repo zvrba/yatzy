@@ -24,7 +24,7 @@ namespace Yatzy
     public static int TwoPairs(DiceState dice) {
       int i = -1, j = -1;
       for (int k = 1; k <= 6; ++k) {
-        if (dice.Counts[k] == 2) {
+        if (dice.Counts[k] >= 2) {
           if (i == -1) i = k; else j = k;
         }
       }
