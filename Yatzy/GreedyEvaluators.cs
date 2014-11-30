@@ -42,7 +42,7 @@ namespace Yatzy
       this.number = number;
     }
 
-    protected sealed override void SetTargetState(int throwsLeft) {
+    protected sealed override void CalculateTargetState(int[] dice, int throwsLeft) {
       for (int i = 0; i < 5; ++i)
         dice[i] = number;
     }
@@ -85,7 +85,7 @@ namespace Yatzy
   // Dummy class with default implementations.
   abstract class PlaceholderEvaluator : DiceEvaluator
   {
-    protected override void SetTargetState(int throwsLeft) {
+    protected override void CalculateTargetState(int[] dice, int throwsLeft) {
       throw new NotImplementedException();
     }
 
@@ -96,7 +96,7 @@ namespace Yatzy
 
   sealed class OnePairEvaluator : DiceEvaluator
   {
-    protected override void SetTargetState(int throwsLeft) {
+    protected override void CalculateTargetState(int[] dice, int throwsLeft) {
       dice[3] = dice[4];
       for (int i = 0; i < 3; ++i)
         dice[i] = 6;
@@ -140,7 +140,7 @@ namespace Yatzy
   sealed class ChanceEvaluator : DiceEvaluator
   {
     // Expected value of a single throw is 3.5, so don't re-roll dice >= 4
-    protected override void SetTargetState(int throwsLeft) {
+    protected override void CalculateTargetState(int[] dice, int throwsLeft) {
       for (int i = 0; i < 5; ++i)
         if (dice[i] < 4)
           dice[i] = 6;
@@ -153,7 +153,7 @@ namespace Yatzy
 
   sealed class YatziEvaluator : DiceEvaluator
   {
-    protected override void SetTargetState(int throwsLeft) {
+    protected override void CalculateTargetState(int[] dice, int throwsLeft) {
       int maxCount = Counts.Max();
       int maxValue = Counts.IndexOf(maxCount);
 

@@ -14,7 +14,7 @@ namespace Yatzy
     public ReadOnlyCollection<int> Values { get { return roDice; } }
     public ReadOnlyCollection<int> Counts { get { return roCounts; } }
 
-    protected readonly int[] dice = new int[5];
+    private readonly int[] dice = new int[5];
     private readonly int[] counts = new int[7];
     private readonly ReadOnlyCollection<int> roDice;
     private readonly ReadOnlyCollection<int> roCounts;
@@ -24,13 +24,20 @@ namespace Yatzy
       roCounts = Array.AsReadOnly(counts);
     }
 
-    protected delegate void StateSetter();
+    protected delegate void StateSetter(int[] dice);
 
     protected void SetState(StateSetter setter) 
     {
-      setter();
+      // TODO: Passing this.dice makes it possible for StateSetter to
+      // store the reference and change our state out-of-band through it.
+      setter(this.dice);
       UpdateCounts();
       Debug.Assert(counts.Sum() == 5);
+    }
+
+    protected void SetState(DiceState state) {
+      Array.Copy(state.dice, dice, 5);
+      Array.Copy(state.counts, counts, 7);
     }
 
     private void UpdateCounts() {
@@ -60,8 +67,8 @@ namespace Yatzy
     /// Dice corresponding to false values in the array are not rolled.
     /// When null, all dice are rolled.
     /// </param>
-    public void Roll(bool[] diceToHold = null) {
-      SetState(() => {
+    public void Roll(IList<bool> diceToHold = null) {
+      SetState((dice) => {
         for (int i = 0; i < 5; ++i) {
           if (diceToHold == null || !diceToHold[i])
             dice[i] = 1 + random[i].Next(6);
@@ -73,21 +80,25 @@ namespace Yatzy
 
   abstract class DiceEvaluator : DiceState
   {
+    public int Score { get { return score; } }
+    public ReadOnlyCollection<bool> DiceToHold { get { return roDiceToHold; } }
+    public virtual string Name { get { return GetType().Name; } }
+
     private readonly bool[] diceToHold = new bool[5];
+    private readonly ReadOnlyCollection<bool> roDiceToHold;
     private int score;
 
-    public int Score { get { return score; } }
-    public bool[] DiceToHold { get { return diceToHold; } }
-    public virtual string Name { get { return GetType().Name; } }
+    protected DiceEvaluator() {
+      roDiceToHold = new ReadOnlyCollection<bool>(diceToHold);
+    }
 
     public void EvaluateState(DiceState currentState, int throwsLeft) {
       Debug.Assert(throwsLeft == 0 || throwsLeft == 1 || throwsLeft == 2);
 
-      for (int i = 0; i < 5; ++i)
-        dice[i] = currentState.Values[i];
+      SetState(currentState);
 
       if (throwsLeft > 0) {
-        SetState(() => SetTargetState(throwsLeft));
+        SetState((dice) => CalculateTargetState(dice, throwsLeft));
         CalculateDiceToHold(currentState);
       }
 
@@ -97,7 +108,7 @@ namespace Yatzy
     /// <summary>
     ///  Called with the current state in dice[].
     /// </summary>
-    protected abstract void SetTargetState(int throwsLeft);
+    protected abstract void CalculateTargetState(int[] dice, int throwsLeft);
     protected abstract int CalculateScore();
 
     private void CalculateDiceToHold(DiceState currentState) {
