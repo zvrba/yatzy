@@ -45,20 +45,6 @@ namespace Yatzy
       get { return readOnlyCounts; }
     }
 
-    /// <summary>
-    /// Distance between two states is defined as the number of dice which needs to be changed to
-    /// get from this state to the other state.
-    /// </summary>
-    public int Distance(DiceState other) {
-      int d = 0;
-
-      for (int value = 1; value < 6; ++value)
-        d += Math.Abs(counts[value] - other.counts[value]);
-
-      Debug.Assert(d % 2 == 0);
-      return d / 2;
-    }
-
     protected void SetState(StateSetter setter) {
       Array.Copy(dice, newDice, 5);
       setter(newDice);
