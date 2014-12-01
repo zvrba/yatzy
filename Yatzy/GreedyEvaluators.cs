@@ -10,7 +10,7 @@ namespace Yatzy
   static class GreedyEvaluators
   {
     // NB! Ordering is important for the forced game.
-    private static DiceEvaluator[] evaluators = new DiceEvaluator[]{
+    private static CombinationEvaluator[] evaluators = new CombinationEvaluator[]{
       new OnesEvaluator(),
       new TwosEvaluator(),
       new ThreesEvaluator(),
@@ -28,12 +28,12 @@ namespace Yatzy
       new YatziEvaluator()
     };
 
-    public static DiceEvaluator[] GetEvaluators() {
+    public static CombinationEvaluator[] GetEvaluators() {
       return evaluators;
     }
   }
 
-  abstract class FixedNumberEvaluator : DiceEvaluator
+  abstract class FixedNumberEvaluator : CombinationEvaluator
   {
     private readonly int number;
 
@@ -83,7 +83,7 @@ namespace Yatzy
   }
 
   // Dummy class with default implementations.
-  abstract class PlaceholderEvaluator : DiceEvaluator
+  abstract class PlaceholderEvaluator : CombinationEvaluator
   {
     protected override void CalculateTargetState(int[] dice, int throwsLeft) {
       throw new NotImplementedException();
@@ -94,7 +94,11 @@ namespace Yatzy
     }
   }
 
-  sealed class OnePairEvaluator : DiceEvaluator
+  //
+  // NB! For classes below, keep in mind that the dice are sorted in ascending order!
+  //
+
+  sealed class OnePairEvaluator : CombinationEvaluator
   {
     protected override void CalculateTargetState(int[] dice, int throwsLeft) {
       dice[3] = dice[4];
@@ -107,9 +111,39 @@ namespace Yatzy
     }
   }
 
-  sealed class TwoPairsEvaluator : PlaceholderEvaluator
+  sealed class TwoPairsEvaluator : CombinationEvaluator
   {
+    protected override void CalculateTargetState(int[] dice, int throwsLeft) {
+      switch (this.Counts.Count(x => x >= 2)) {
+      case 0: // No repeated values
+        Handle0(dice);
+        break;
 
+      case 1: // One repeated value
+        Handle1();
+        break;
+
+      case 2: // Already have two pairs; do nothing.
+        break;
+      
+      default:
+        throw new ApplicationException("impossible case");
+      }
+    }
+
+    protected override int CalculateScore() {
+      return ScoreCalculator.TwoPairs(this);
+    }
+
+    void Handle0(int[] dice) {
+      Debug.Assert(dice[4] != dice[3]);
+      dice[0] = dice[4];
+      dice[1] = dice[3];
+    }
+
+    void Handle1() {
+
+    }
   }
 
   sealed class ThreeOfAKindEvaluator : PlaceholderEvaluator
@@ -137,7 +171,7 @@ namespace Yatzy
 
   }
 
-  sealed class ChanceEvaluator : DiceEvaluator
+  sealed class ChanceEvaluator : CombinationEvaluator
   {
     // Expected value of a single throw is 3.5, so don't re-roll dice >= 4
     protected override void CalculateTargetState(int[] dice, int throwsLeft) {
@@ -151,7 +185,7 @@ namespace Yatzy
     }
   }
 
-  sealed class YatziEvaluator : DiceEvaluator
+  sealed class YatziEvaluator : CombinationEvaluator
   {
     protected override void CalculateTargetState(int[] dice, int throwsLeft) {
       int maxCount = Counts.Max();

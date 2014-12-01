@@ -11,7 +11,7 @@ namespace Yatzy
 
     protected readonly RollingDice dice;
     protected readonly int[] scores;
-    protected readonly DiceEvaluator[] evaluators;
+    protected readonly CombinationEvaluator[] evaluators;
     private readonly ReadOnlyCollection<int> roScores;
 
     protected AbstractGame() {
@@ -24,7 +24,7 @@ namespace Yatzy
         PlayRound(round);
     }
 
-    protected AbstractGame(int seed, DiceEvaluator[] evaluators) {
+    protected AbstractGame(int seed, CombinationEvaluator[] evaluators) {
       seed = (seed+1) * 1711; // Ensure not zero
       this.dice = new RollingDice(seed);
       this.evaluators = evaluators;

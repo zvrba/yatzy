@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
 
 namespace Yatzy
 {
-  static class ScoreCalculator
+  public static class ScoreCalculator
   {
     // Covers Ones, Twos, ..., Sixes
     public static int FixedNumber(DiceState dice, int number) {
@@ -13,11 +12,11 @@ namespace Yatzy
     }
 
     // Covers OnePair, ThreeOfAKind, FourOfAKind
-    public static int NOfAKind(DiceState dice, int nOfAKind) {
+    public static int NOfAKind(DiceState dice, int count) {
       // Iterating in descending order will return highest score for OnePair (if multiple matches)
       for (int i = 6; i >= 1; --i)
-        if (dice.Counts[i] == nOfAKind)
-          return i * nOfAKind;
+        if (dice.Counts[i] == count)
+          return i * count;
       return 0;
     }
 
