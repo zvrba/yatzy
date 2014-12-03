@@ -23,7 +23,7 @@ namespace Yatzy
     }
 
     /// <summary>
-    /// Must be overriden to actually set the values and counts.
+    /// Must be overriden to actually set the values and counts.  The new values must be sorted in increasing order.
     /// </summary>
     protected abstract void StateSetter();
 
@@ -57,6 +57,10 @@ namespace Yatzy
       for (int v = 1; v <= 6; ++v)
         if (values.Count(x => x==v) != counts[v])
           throw new ApplicationException("invalid dice counts");
+
+      for (int i = 1; i < 5; ++i)
+        if (values[i] < values[i-1])
+          throw new ApplicationException("dice not sorted");
     }
   }
 }

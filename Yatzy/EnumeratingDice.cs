@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Yatzy
 {
+  /// <summary>
+  /// Enumerate through all possible combinations of 5 dice.
+  /// </summary>
   public abstract class EnumeratingDice : DiceState
   {
     protected bool isDone;
