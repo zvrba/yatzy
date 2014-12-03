@@ -12,24 +12,28 @@ namespace Yatzy
   /// </summary>
   public abstract class DiceState
   {
-    private readonly int[] dice = new int[5];
-    private readonly int[] counts = new int[7];
-    private readonly int[] newDice = new int[5];
     private readonly ReadOnlyCollection<int> readOnlyDice;
     private readonly ReadOnlyCollection<int> readOnlyCounts;
+    protected readonly int[] values = new int[5];
+    protected readonly int[] counts = new int[7];
 
     protected DiceState() {
-      readOnlyDice = Array.AsReadOnly(dice);
+      readOnlyDice = Array.AsReadOnly(values);
       readOnlyCounts = Array.AsReadOnly(counts);
     }
 
     /// <summary>
-    /// Procedure to set the new state.
+    /// Must be overriden to actually set the values and counts.
     /// </summary>
-    /// <param name="dice">A copy of the current state, to be filled in with the new state.
-    /// Thus, while setter is running, this.Values is valid and unaffected by changes to
-    /// the passed array.</param>
-    protected delegate void StateSetter(int[] dice);
+    protected abstract void StateSetter();
+
+    /// <summary>
+    /// Call the state setter to update the state. In debug mode, verifies the consistency of values and counts.
+    /// </summary>
+    protected void SetState() {
+      StateSetter();
+      ValidateState();
+    }
 
     /// <summary>
     /// Access the actual dice values.
@@ -45,34 +49,14 @@ namespace Yatzy
       get { return readOnlyCounts; }
     }
 
-    protected void SetState(StateSetter setter) {
-      Array.Copy(dice, newDice, 5);
-      setter(newDice);
-
-      ValidateNewState();
-      Array.Copy(newDice, dice, 5);
-
-      UpdateCounts();
-    }
-
-    protected void SetState(DiceState state) {
-      Array.Copy(state.dice, dice, 5);
-      Array.Copy(state.counts, counts, 7);
-    }
-
-    private void ValidateNewState() {
-      if (!newDice.All(x => x >= 1 && x <= 6))
+    [Conditional("DEBUG")]
+    private void ValidateState() {
+      if (!values.All(x => x >= 1 && x <= 6))
         throw new ApplicationException("invalid dice values");
-    }
 
-    private void UpdateCounts() {
-      for (int i = 0; i < 7; ++i)
-        counts[i] = 0;
-
-      for (int i = 0; i < 5; ++i)
-        ++counts[dice[i]];
-
-      Debug.Assert(counts.Sum() == 5, "inconsistent counts");
+      for (int v = 1; v <= 6; ++v)
+        if (values.Count(x => x==v) != counts[v])
+          throw new ApplicationException("invalid dice counts");
     }
   }
 }

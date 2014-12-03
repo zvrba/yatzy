@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="CombinationEvaluator.cs" />
     <Compile Include="DiceState.cs" />
+    <Compile Include="EnumeratingDice.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GreedyEvaluators.cs" />
     <Compile Include="Program.cs" />

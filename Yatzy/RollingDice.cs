@@ -12,6 +12,7 @@ namespace Yatzy
   public sealed class RollingDice : DiceState
   {
     private readonly Random[] random = new Random[5];
+    private IList<bool> diceToHold;
 
     /// <summary>
     /// Constructor.
@@ -30,13 +31,17 @@ namespace Yatzy
     /// When null, all dice are rolled.
     /// </param>
     public void Roll(IList<bool> diceToHold = null) {
-      SetState((dice) => {
-        for (int i = 0; i < 5; ++i) {
-          if (diceToHold == null || !diceToHold[i])
-            dice[i] = 1 + random[i].Next(6);
-        }
-        Array.Sort(dice);
-      });
+      this.diceToHold = diceToHold;
+      StateSetter();
     }
+
+    protected override void StateSetter() {
+      for (int i = 0; i < 5; ++i) {
+        if (diceToHold == null || !diceToHold[i])
+          values[i] = 1 + random[i].Next(6);
+      }
+      Array.Sort(values);
+    }
+
   }
 }
