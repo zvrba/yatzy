@@ -9,6 +9,7 @@ namespace Yatzy
   /// <summary>
   /// This exposes an immutable view of dice values and counts of each value.  State can only
   /// be mutated in a controlled way by calling <see cref="SetState"/> method.
+  /// TODO: For computations, we only need counts! Values could be synthesized on demand!
   /// </summary>
   public abstract class DiceState
   {

@@ -45,7 +45,6 @@
     <Compile Include="DiceState.cs" />
     <Compile Include="EnumeratingDice.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GreedyEvaluators.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RollingDice.cs" />
