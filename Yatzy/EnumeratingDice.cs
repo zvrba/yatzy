@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Yatzy
@@ -43,30 +43,43 @@ namespace Yatzy
     
     #endregion
 
+    /// <summary>
+    /// Begin enumerating from the first combination.
+    /// </summary>
     public void Reset() {
       isDone = false;
       First();
     }
 
+    /// <summary>
+    /// Get the next valid (non-zero score) combination.
+    /// </summary>
+    /// <returns></returns>
     public bool NextCombination() {
       do {
         StateSetter();
-        if (IsStateAcceptable())
+        if (GetScore() > 0)
           return true;
       } while (!isDone);
       return false;
     }
 
-    protected sealed override void StateSetter() {
-      isDone = Next() == K;
+    /// <summary>
+    /// Calculates score of this state. Derived classes must implement score calculation for specific patterns.
+    /// </summary>
+    public abstract int CalculateScore(DiceState dice);
+
+    public int GetScore() {
+      int score = CalculateScore(this);
+      Debug.Assert(score >= 0 && score <= 50);
+      return CalculateScore(this);
     }
 
     /// <summary>
-    /// Derived classes should override this if they want to filter patterns, but use the
-    /// provided brute-force combination generator.
+    /// Moves this state to the next combination.
     /// </summary>
-    protected virtual bool IsStateAcceptable() {
-      return true;
+    protected sealed override void StateSetter() {
+      isDone = Next() == K;
     }
   }
 }
