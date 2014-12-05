@@ -50,7 +50,7 @@ namespace Yatzy
       return dice.Values.Sum();
     }
 
-    public static int Yatzi(DiceState dice) {
+    public static int Yatzy(DiceState dice) {
       return dice.Counts.Contains(5) ? 50 : 0;
     }
   }
