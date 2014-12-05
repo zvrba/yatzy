@@ -57,11 +57,7 @@ namespace Yatzy
       return false;
     }
 
-    /// <summary>
-    /// Derived classes should override this if they want to generate patterns in a more
-    /// efficient manner than filtering combinations.
-    /// </summary>
-    protected override void StateSetter() {
+    protected sealed override void StateSetter() {
       isDone = Next() == K;
     }
 
