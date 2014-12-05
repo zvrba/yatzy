@@ -86,7 +86,7 @@ namespace Yatzy.Enumerators
   public sealed class LargeStraight : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.FixedNumber(this, 2);
+      return ScoreCalculator.Straight(this, 2);
     }
   }
 
