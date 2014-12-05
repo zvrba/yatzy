@@ -57,12 +57,17 @@ namespace Yatzy
       return false;
     }
 
-    protected sealed override void StateSetter() {
+    /// <summary>
+    /// Derived classes should override this if they want to generate patterns in a more
+    /// efficient manner than filtering combinations.
+    /// </summary>
+    protected override void StateSetter() {
       isDone = Next() == K;
     }
 
     /// <summary>
-    /// Base classes should override this to enumerate only over certain patterns.
+    /// Derived classes should override this if they want to filter patterns, but use the
+    /// provided brute-force combination generator.
     /// </summary>
     protected virtual bool IsStateAcceptable() {
       return true;
