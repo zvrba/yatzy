@@ -37,11 +37,12 @@ namespace Yatzy
 
     protected override void StateSetter() {
       for (int i = 0; i < 5; ++i) {
-        if (diceToHold == null || !diceToHold[i])
-          values[i] = 1 + random[i].Next(6);
+        if (diceToHold == null || !diceToHold[i]) {
+          int newValue = 1 + random[i].Next(6);
+          --counts[this.Values[i]];
+          ++counts[newValue];
+        }
       }
-      Array.Sort(values);
     }
-
   }
 }

@@ -66,6 +66,7 @@ namespace Yatzy
 
     /// <summary>
     /// Calculates score of this state. Derived classes must implement score calculation for specific patterns.
+    /// TODO: It would probably be better design to have a separate class hierarchy for score calculation.
     /// </summary>
     public abstract int CalculateScore(DiceState dice);
 

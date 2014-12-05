@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Yatzy
@@ -34,7 +35,9 @@ namespace Yatzy
       for (int i = first; i < first+5; ++i)
         if (dice.Counts[i] != 1)
           return 0;
-      return dice.Values.Sum();
+
+      Debug.Assert(first == 1 || first == 2, "invalid parameter");
+      return first == 1 ? 15 : 20;
     }
 
     public static int House(DiceState dice) {
@@ -47,7 +50,10 @@ namespace Yatzy
     }
 
     public static int Chance(DiceState dice) {
-      return dice.Values.Sum();
+      int sum = 0;
+      for (int i = 1; i < 7; ++i)
+        sum += i * dice.Counts[i];
+      return sum;
     }
 
     public static int Yatzy(DiceState dice) {

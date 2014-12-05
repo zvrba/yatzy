@@ -9,38 +9,47 @@ namespace Yatzy
   /// <summary>
   /// This exposes an immutable view of dice values and counts of each value.  State can only
   /// be mutated in a controlled way by calling <see cref="SetState"/> method.
-  /// TODO: For computations, we only need counts! Values could be synthesized on demand!
   /// </summary>
   public abstract class DiceState
   {
-    private readonly ReadOnlyCollection<int> readOnlyDice;
+    private readonly ReadOnlyCollection<int> readOnlyValues;
     private readonly ReadOnlyCollection<int> readOnlyCounts;
-    protected readonly int[] values = new int[5];
+    private bool valuesValid;
+    private readonly int[] values = new int[5];
     protected readonly int[] counts = new int[7];
 
     protected DiceState() {
-      readOnlyDice = Array.AsReadOnly(values);
+      readOnlyValues = Array.AsReadOnly(values);
       readOnlyCounts = Array.AsReadOnly(counts);
     }
 
     /// <summary>
-    /// Must be overriden to actually set the values and counts.  The new values must be sorted in increasing order.
+    /// Must be overriden to actually set the counts for each value. (Counts make computations
+    /// simplest; values are synthesized lazily on demand.)
     /// </summary>
     protected abstract void StateSetter();
 
     /// <summary>
-    /// Call the state setter to update the state. In debug mode, verifies the consistency of values and counts.
+    /// Call the state setter to update the state.
     /// </summary>
     protected void SetState() {
       StateSetter();
-      ValidateState();
+      ValidateCounts();
+      valuesValid = false;
     }
 
     /// <summary>
     /// Access the actual dice values.
     /// </summary>
     public ReadOnlyCollection<int> Values {
-      get { return readOnlyDice; }
+      get {
+        if (!valuesValid) {
+          CalculateValues();
+          ValidateValues();
+          valuesValid = true;
+        }
+        return readOnlyValues;        
+      }
     }
 
     /// <summary>
@@ -50,8 +59,23 @@ namespace Yatzy
       get { return readOnlyCounts; }
     }
 
+    // Calculates values from counts; the result is sorted.
+    private void CalculateValues() {
+      int k = 0;
+
+      for (int i = 1; i < 7; ++i)
+        for (int j = 0; j < counts[i]; ++j)
+          values[k++] = i;
+    }
+
     [Conditional("DEBUG")]
-    private void ValidateState() {
+    private void ValidateCounts() {
+      if (counts.Sum() != 5)
+        throw new ApplicationException("invalid counts");
+    }
+
+    [Conditional("DEBUG")]
+    private void ValidateValues() {
       if (!values.All(x => x >= 1 && x <= 6))
         throw new ApplicationException("invalid dice values");
 
