@@ -44,6 +44,13 @@ namespace Yatzy
     #endregion
 
     /// <summary>
+    /// Return the name of evaluator.
+    /// </summary>
+    public virtual string Name {
+      get { return GetType().Name; }
+    }
+
+    /// <summary>
     /// Begin enumerating from the first combination.
     /// </summary>
     public void Reset() {
