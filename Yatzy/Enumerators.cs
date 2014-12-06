@@ -9,105 +9,105 @@ namespace Yatzy.Enumerators
   public sealed class Ones : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.FixedNumber(this, 1);
+      return ScoreCalculator.FixedNumber(state, 1);
     }
   }
 
   public sealed class Twos : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.FixedNumber(this, 2);
+      return ScoreCalculator.FixedNumber(state, 2);
     }
   }
 
   public sealed class Threes : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.FixedNumber(this, 3);
+      return ScoreCalculator.FixedNumber(state, 3);
     }
   }
 
   public sealed class Fours : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.FixedNumber(this, 4);
+      return ScoreCalculator.FixedNumber(state, 4);
     }
   }
 
   public sealed class Fives : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.FixedNumber(this, 5);
+      return ScoreCalculator.FixedNumber(state, 5);
     }
   }
 
   public sealed class Sixes : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.FixedNumber(this, 6);
+      return ScoreCalculator.FixedNumber(state, 6);
     }
   }
 
   public sealed class OnePair : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.NOfAKind(this, 2);
+      return ScoreCalculator.NOfAKind(state, 2);
     }
   }
 
   public sealed class TwoPairs : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.TwoPairs(this);
+      return ScoreCalculator.TwoPairs(state);
     }
   }
 
   public sealed class ThreeOfAKind : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.NOfAKind(this, 3);
+      return ScoreCalculator.NOfAKind(state, 3);
     }
   }
 
   public sealed class FourOFAKind : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.NOfAKind(this, 4);
+      return ScoreCalculator.NOfAKind(state, 4);
     }
   }
 
   public sealed class SmallStraight : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.Straight(this, 1);
+      return ScoreCalculator.Straight(state, 1);
     }
   }
 
   public sealed class LargeStraight : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.Straight(this, 2);
+      return ScoreCalculator.Straight(state, 2);
     }
   }
 
   public sealed class House : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.House(this);
+      return ScoreCalculator.House(state);
     }
   }
 
   public sealed class Chance : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.Chance(this);
+      return ScoreCalculator.Chance(state);
     }
   }
 
   public sealed class Yatzy : EnumeratingDice
   {
     public override int CalculateScore(DiceState state) {
-      return ScoreCalculator.Yatzy(this);
+      return ScoreCalculator.Yatzy(state);
     }
   }
 }
