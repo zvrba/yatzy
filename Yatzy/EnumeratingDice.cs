@@ -36,13 +36,10 @@ namespace Yatzy
     public static readonly EnumeratingDice Yatzy = new Yatzy.Enumerators.Yatzy();
     #endregion
 
-    #region Array of instances
     public static readonly EnumeratingDice[] Instances = new EnumeratingDice[] {
       Ones, Twos, Threes, Fours, Fives, Sixes, OnePair, TwoPairs, ThreeOfAKind,
       FourOFAKind, SmallStraight, LargeStraight, House, Chance, Yatzy
     };
-    #endregion
-
 
     #region Composition generator (fills in the 1-based counts array)
 
@@ -91,10 +88,10 @@ namespace Yatzy
     public bool NextCombination() {
       do {
         StateSetter();
-        if (GetScore() > 0)
-          return true;
-      } while (!isDone);
-      return false;
+        if (isDone)
+          return false;
+      } while (CalculateScore() == 0);
+      return true;
     }
 
     /// <summary>
@@ -103,7 +100,7 @@ namespace Yatzy
     /// </summary>
     public abstract int CalculateScore(DiceState dice);
 
-    public int GetScore() {
+    public int CalculateScore() {
       int score = CalculateScore(this);
       Debug.Assert(score >= 0 && score <= 50);
       return CalculateScore(this);

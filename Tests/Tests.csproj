@@ -51,6 +51,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DiceState.cs" />
+    <Compile Include="Enumeration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
