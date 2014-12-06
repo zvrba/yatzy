@@ -17,6 +17,9 @@ namespace Yatzy
     private bool valuesValid;
     private readonly int[] values = new int[5];
     private readonly int[] counts = new int[7];
+
+    // If this were protected, we could avoid excessive array copying in EnumeratingDice.  But the
+    // arrays are small, so we don't bother.
     private readonly int[] newCounts = new int[7];
 
     protected DiceState() {
