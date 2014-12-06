@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Yatzy
 {
-  public static class ScoreCalculator
+  static class ScoreCalculator
   {
     // Covers Ones, Twos, ..., Sixes
     public static int FixedNumber(DiceState dice, int number) {
