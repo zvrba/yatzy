@@ -50,7 +50,7 @@ namespace Tests
       dice.SetValues(new int[] { 1, 3, 3, 3, 1 });
       Assert.AreEqual(2, EnumeratingDice.Ones.CalculateScore(dice));
       Assert.AreEqual(9, EnumeratingDice.Threes.CalculateScore(dice));
-      Assert.AreEqual(2, EnumeratingDice.OnePair.CalculateScore(dice));
+      Assert.AreEqual(6, EnumeratingDice.OnePair.CalculateScore(dice)); // Choose highest pair
       Assert.AreEqual(9, EnumeratingDice.ThreeOfAKind.CalculateScore(dice));
       Assert.AreEqual(11, EnumeratingDice.House.CalculateScore(dice));
 

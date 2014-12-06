@@ -32,7 +32,7 @@ namespace Yatzy
     }
 
     public static int Straight(DiceState dice, int first) {
-      if (first != 1 || first != 2)
+      if (first != 1 && first != 2)
         throw new ArgumentException("invalid argument (first)");
       for (int i = first; i < first+5; ++i)
         if (dice.Counts[i] != 1)
