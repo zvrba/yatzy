@@ -16,7 +16,7 @@ namespace Yatzy
     public static int NOfAKind(DiceState dice, int count) {
       // Iterating in descending order will return highest score for OnePair (if multiple matches)
       for (int i = 6; i >= 1; --i)
-        if (dice.Counts[i] == count)
+        if (dice.Counts[i] >= count)
           return i * count;
       return 0;
     }
