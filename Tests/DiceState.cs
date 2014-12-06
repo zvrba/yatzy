@@ -9,22 +9,17 @@ namespace Tests
   {
     private int[] providedCounts;
 
-    protected override void StateSetter() {
-      Array.Copy(providedCounts, this.counts, this.counts.Length);
-    }
-
     public void SetCounts(int[] counts) {
       Debug.Assert(counts.Length == 7);
-      this.providedCounts = counts;
-      this.SetState();
+      SetState((newCounts) => counts.CopyTo(newCounts, 0));
     }
 
     public void SetValues(int[] values) {
       Debug.Assert(values.Length == 5);
-      providedCounts = new int[7];
-      for (int i = 0; i < 5; ++i)
-        ++providedCounts[values[i]];
-      SetState();
+      SetState((newCounts) => {
+        for (int i = 0; i < 5; ++i)
+          ++newCounts[values[i]];
+      });
     }
   }
 

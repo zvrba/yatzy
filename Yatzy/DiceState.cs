@@ -16,25 +16,28 @@ namespace Yatzy
     private readonly ReadOnlyCollection<int> readOnlyCounts;
     private bool valuesValid;
     private readonly int[] values = new int[5];
-    protected readonly int[] counts = new int[7];
+    private readonly int[] counts = new int[7];
+    private readonly int[] newCounts = new int[7];
 
     protected DiceState() {
       readOnlyValues = Array.AsReadOnly(values);
       readOnlyCounts = Array.AsReadOnly(counts);
     }
 
-    /// <summary>
-    /// Must be overriden to actually set the counts for each value. (Counts make computations
-    /// simplest; values are synthesized lazily on demand.)
-    /// </summary>
-    protected abstract void StateSetter();
+    protected delegate void StateSetter(int[] newCounts);
 
     /// <summary>
-    /// Call the state setter to update the state.
+    /// Call the provided delegate to update the state.  The delegate can access the current
+    /// state through Values and Counts properties and must fill in the passed-in array with
+    /// the new state. The new state array does not alias the existing state, and is zero-
+    /// initialized.
     /// </summary>
-    protected void SetState() {
-      StateSetter();
-      ValidateCounts();
+    protected void SetState(StateSetter stateSetter) {
+      for (int i = 0; i < newCounts.Length; ++i)
+        newCounts[i] = 0;
+      stateSetter(newCounts);
+      ValidateCounts(newCounts);
+      newCounts.CopyTo(counts, 0);
       valuesValid = false;
     }
 
@@ -69,7 +72,7 @@ namespace Yatzy
     }
 
     [Conditional("DEBUG")]
-    private void ValidateCounts() {
+    private static void ValidateCounts(int[] counts) {
       if (counts.Sum() != 5)
         throw new ApplicationException("invalid counts");
     }

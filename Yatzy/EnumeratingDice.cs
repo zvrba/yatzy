@@ -16,6 +16,7 @@ namespace Yatzy
   {
     private const int N = 5;
     private const int K = 6;
+    private int[] combination = new int[7];
     protected bool isDone = false;
 
     #region Named instances
@@ -44,22 +45,22 @@ namespace Yatzy
     #region Composition generator (fills in the 1-based counts array)
 
     private void First() {
-      counts[1] = N;
+      combination[1] = N;
       for (int k = 1; k < K; ++k)
-        counts[k+1] = 0;
+        combination[k+1] = 0;
     }
 
     private int Next() {
       int j = 0;
 
-      while (counts[j+1] == 0) ++j;
+      while (combination[j+1] == 0) ++j;
       if (j == K-1) return K;
 
-      int v = counts[j+1];
-      counts[j+1] = 0;
-      counts[1] = v-1;
+      int v = combination[j+1];
+      combination[j+1] = 0;
+      combination[1] = v-1;
       ++j;
-      ++counts[j+1];
+      ++combination[j+1];
 
       return j;
     }
@@ -77,8 +78,11 @@ namespace Yatzy
     /// Begin enumerating from the first combination.
     /// </summary>
     public void Reset() {
+      SetState((newCounts) => {
+        First();
+        combination.CopyTo(newCounts, 0);
+      });
       isDone = false;
-      First();
     }
 
     /// <summary>
@@ -87,7 +91,11 @@ namespace Yatzy
     /// <returns></returns>
     public bool NextCombination() {
       do {
-        StateSetter();
+        SetState((newCounts) => {
+          this.Counts.CopyTo(combination, 0);
+          this.isDone = Next() == K;
+          combination.CopyTo(newCounts, 0);
+        });
         if (isDone)
           return false;
       } while (CalculateScore() == 0);
@@ -104,13 +112,6 @@ namespace Yatzy
       int score = CalculateScore(this);
       Debug.Assert(score >= 0 && score <= 50);
       return CalculateScore(this);
-    }
-
-    /// <summary>
-    /// Moves this state to the next combination.
-    /// </summary>
-    protected sealed override void StateSetter() {
-      isDone = Next() == K;
     }
   }
 }

@@ -32,17 +32,20 @@ namespace Yatzy
     /// </param>
     public void Roll(IList<bool> diceToHold = null) {
       this.diceToHold = diceToHold;
-      StateSetter();
+      SetState((newCounts) => {
+        this.Counts.CopyTo(newCounts, 0);
+        Roll(newCounts);
+      });
     }
 
-    protected override void StateSetter() {
+    private void Roll(int[] newCounts) {
       for (int i = 0; i < 5; ++i) {
         if (diceToHold == null || !diceToHold[i]) {
           int newValue = 1 + random[i].Next(6);
-          --counts[this.Values[i]];
-          ++counts[newValue];
+          --newCounts[this.Values[i]];
+          ++newCounts[newValue];
         }
       }
     }
-  }
+  } 
 }
