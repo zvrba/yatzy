@@ -22,8 +22,6 @@ namespace Tests
     public void SetValues(int[] values) {
       Debug.Assert(values.Length == 5);
       providedCounts = new int[7];
-      for (int i = 0; i < 7; ++i)
-        providedCounts[i] = 0;
       for (int i = 0; i < 5; ++i)
         ++providedCounts[values[i]];
       SetState();
