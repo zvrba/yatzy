@@ -11,7 +11,7 @@ namespace Yatzy
 
     protected readonly RollingDice dice;
     protected readonly int[] scores;
-    protected readonly CombinationEvaluator[] evaluators;
+    protected readonly StateComparer[] evaluators;
     private readonly ReadOnlyCollection<int> roScores;
 
     protected AbstractGame() {
@@ -24,7 +24,7 @@ namespace Yatzy
         PlayRound(round);
     }
 
-    protected AbstractGame(int seed, CombinationEvaluator[] evaluators) {
+    protected AbstractGame(int seed, StateComparer[] evaluators) {
       seed = (seed+1) * 1711; // Ensure not zero
       this.dice = new RollingDice(seed);
       this.evaluators = evaluators;
@@ -53,7 +53,7 @@ namespace Yatzy
       de = ChooseEvaluator(0);
       Debug.Assert(scores[de] == -1, "already used evaluator");
 
-      scores[de] = evaluators[de].Score;
+      // scores[de] = evaluators[de].Score;
     }
   }
 }

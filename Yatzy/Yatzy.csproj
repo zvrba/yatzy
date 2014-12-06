@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CombinationEvaluator.cs" />
+    <Compile Include="StateComparer.cs" />
     <Compile Include="DiceState.cs" />
     <Compile Include="EnumeratingDice.cs" />
     <Compile Include="Enumerators.cs" />
