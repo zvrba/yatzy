@@ -81,4 +81,13 @@ namespace Tests
       Assert.AreEqual(16, EnumeratingDice.Chance.CalculateScore(dice));
     }
   }
+
+  [TestClass]
+  public class ComparisonTests
+  {
+    VerbatimDiceStateSetter diceFrom = new VerbatimDiceStateSetter();
+    VerbatimDiceStateSetter diceTo = new VerbatimDiceStateSetter();
+    DiceStateComparer comparer = new DiceStateComparer();
+
+  }
 }

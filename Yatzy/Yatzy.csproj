@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompositionGenerator.cs" />
-    <Compile Include="StateComparer.cs" />
+    <Compile Include="DiceStateComparer.cs" />
     <Compile Include="DiceState.cs" />
     <Compile Include="EnumeratingDice.cs" />
     <Compile Include="Enumerators.cs" />

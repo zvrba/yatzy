@@ -7,16 +7,17 @@ using System.Linq;
 namespace Yatzy
 {
   /// <summary>
-  /// Evaluate a combination with respect to a particular combination rule.
+  /// Compare two dice configurations wrt. the number of transitions needed from the one state
+  /// to the other, as well as creating a mask of the dice which should be changed.
   /// </summary>
-  public abstract class StateComparer
+  public class DiceStateComparer
   {
     private readonly bool[] diceToHold = new bool[5];
     private readonly ReadOnlyCollection<bool> readOnlyDiceToHold;
     private int distance;
     private DiceState from, to;
 
-    public StateComparer(EnumeratingDice combinationEnumerator) {
+    public DiceStateComparer() {
       readOnlyDiceToHold = new ReadOnlyCollection<bool>(diceToHold);
     }
 
