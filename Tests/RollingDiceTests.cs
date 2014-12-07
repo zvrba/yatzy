@@ -5,7 +5,7 @@ using Yatzy;
 namespace Tests
 {
   [TestClass]
-  public class Rolling
+  public class RollingDiceTests
   {
     const int ROLL_TRIES = 100;
     RollingDice rolling = new RollingDice(9901823);

@@ -50,10 +50,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="DiceState.cs" />
-    <Compile Include="Enumeration.cs" />
+    <Compile Include="ScoringTests.cs" />
+    <Compile Include="EnumeratingDiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rolling.cs" />
+    <Compile Include="RollingDiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Yatzy\Yatzy.csproj">

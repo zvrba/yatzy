@@ -15,7 +15,7 @@ namespace Tests
   }
 
   [TestClass]
-  public class Enumeration
+  public class EnumeratingDiceTests
   {
     static int EnumerateAll(EnumeratingDice enumerator) {
       enumerator.First();

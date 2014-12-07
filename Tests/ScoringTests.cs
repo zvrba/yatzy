@@ -22,7 +22,7 @@ namespace Tests
   }
 
   [TestClass]
-  public class DiceStateTest
+  public class ScoringTests
   {
     VerbatimDiceStateSetter dice = new VerbatimDiceStateSetter();
 
