@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,10 +32,12 @@ namespace Yatzy
     public static readonly EnumeratingDice Yatzy = new Yatzy.Enumerators.Yatzy();
     #endregion
 
-    public static readonly EnumeratingDice[] Instances = new EnumeratingDice[] {
+    private static readonly EnumeratingDice[] instances = new EnumeratingDice[] {
       Ones, Twos, Threes, Fours, Fives, Sixes, OnePair, TwoPairs, ThreeOfAKind,
       FourOFAKind, SmallStraight, LargeStraight, House, Chance, Yatzy
     };
+
+    public static readonly ReadOnlyCollection<EnumeratingDice> Instances = Array.AsReadOnly(instances);
 
     /// <summary>
     /// Return the name of evaluator.
@@ -57,7 +60,7 @@ namespace Yatzy
     /// <summary>
     /// Get the next valid (non-zero score) combination.
     /// </summary>
-    public bool NextCombination() {
+    public bool Next() {
       if (generator.Next() == K)
         return false;
       SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
@@ -80,7 +83,7 @@ namespace Yatzy
       this.First();
       yield return this;
 
-      while (this.NextCombination())
+      while (this.Next())
         yield return this;
     }
 

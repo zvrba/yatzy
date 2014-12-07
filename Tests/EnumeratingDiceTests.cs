@@ -21,7 +21,7 @@ namespace Tests
       enumerator.First();
       int count = 1;
 
-      while (enumerator.NextCombination())
+      while (enumerator.Next())
         ++count;
 
       return count;
