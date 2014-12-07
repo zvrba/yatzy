@@ -6,18 +6,11 @@ using System.Threading.Tasks;
 
 namespace Yatzy
 {
-  /// <summary>
-  /// Enumerate through all possible combinations of 5 dice.  This class enumerates all
-  /// possible compositions of 5 into at most 6 parts, i.e., it enumerates all ordered
-  /// tuples (x0,..,x5) such that x0 + ... + x5 = 5 and 0 <= xi <= 5.
-  /// <remarks>See "FXT book", chapter 7, on compositions.</remarks>
-  /// </summary>
   public abstract class EnumeratingDice : DiceState
   {
     private const int N = 5;
     private const int K = 6;
-    private int[] combination = new int[7];
-    protected bool isDone = false;
+    private CompositionGenerator generator = new CompositionGenerator(N, K);
 
     #region Named instances
     public static readonly EnumeratingDice Ones = new Yatzy.Enumerators.Ones();
@@ -42,31 +35,6 @@ namespace Yatzy
       FourOFAKind, SmallStraight, LargeStraight, House, Chance, Yatzy
     };
 
-    #region Composition generator (fills in the 1-based counts array)
-
-    private void First() {
-      combination[1] = N;
-      for (int k = 1; k < K; ++k)
-        combination[k+1] = 0;
-    }
-
-    private int Next() {
-      int j = 0;
-
-      while (combination[j+1] == 0) ++j;
-      if (j == K-1) return K;
-
-      int v = combination[j+1];
-      combination[j+1] = 0;
-      combination[1] = v-1;
-      ++j;
-      ++combination[j+1];
-
-      return j;
-    }
-    
-    #endregion
-
     /// <summary>
     /// Return the name of evaluator.
     /// </summary>
@@ -75,30 +43,35 @@ namespace Yatzy
     }
 
     /// <summary>
-    /// Begin enumerating from the first combination.
+    /// Begin enumerating from the first valid (non-zero score) combination.
+    /// If there is no valid first combination, an exception is thrown.
     /// </summary>
-    public void Reset() {
-      SetState((newCounts) => {
-        First();
-        combination.CopyTo(newCounts, 0);
-      });
-      isDone = false;
+    public void First() {
+      generator.First();
+      SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
+      if (!AdvanceToValidCombination())
+        throw new ApplicationException("no valid combinations in this instance");
     }
 
     /// <summary>
     /// Get the next valid (non-zero score) combination.
     /// </summary>
-    /// <returns></returns>
     public bool NextCombination() {
-      do {
-        SetState((newCounts) => {
-          this.Counts.CopyTo(combination, 0);
-          this.isDone = Next() == K;
-          combination.CopyTo(newCounts, 0);
-        });
-        if (isDone)
+      if (generator.Next() == K)
+        return false;
+      SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
+      return AdvanceToValidCombination();
+    }
+
+    /// <summary>
+    /// Advances to the next valid combination; does nothing if the current combination is valid.
+    /// </summary>
+    private bool AdvanceToValidCombination() {
+      while (CalculateScore() == 0) {
+        if (generator.Next() == K)
           return false;
-      } while (CalculateScore() == 0);
+        SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
+      }
       return true;
     }
 

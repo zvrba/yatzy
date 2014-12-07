@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompositionGenerator.cs" />
     <Compile Include="StateComparer.cs" />
     <Compile Include="DiceState.cs" />
     <Compile Include="EnumeratingDice.cs" />
