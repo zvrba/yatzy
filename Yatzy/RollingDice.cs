@@ -21,6 +21,7 @@ namespace Yatzy
     public RollingDice(int seed) {
       for (int i = 0; i < 5; ++i)
         random[i] = new Random(seed + i);
+      Roll();
     }
 
     /// <summary>

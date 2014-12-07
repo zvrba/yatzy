@@ -22,9 +22,19 @@ namespace Yatzy
     // arrays are small, so we don't bother.
     private readonly int[] newCounts = new int[7];
 
+    /// <summary>
+    /// Ensures that counts and values are consistently initialized.
+    /// </summary>
     protected DiceState() {
       readOnlyValues = Array.AsReadOnly(values);
       readOnlyCounts = Array.AsReadOnly(counts);
+
+      counts[1] = 5;
+      for (int i = 0; i < 5; ++i)
+        values[i] = 1;
+
+      ValidateCounts(counts);
+      ValidateValues();
     }
 
     protected delegate void StateSetter(int[] newCounts);
