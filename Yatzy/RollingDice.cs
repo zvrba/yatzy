@@ -48,5 +48,18 @@ namespace Yatzy
         }
       }
     }
+
+    static private int CastDie(Random r) {
+      int result;
+
+      do {
+        result = 0;
+        for (int bit = 0; bit < 3; ++bit)
+          if ((r.Next() & 17) != 0)
+            result |= (1 << bit);
+      } while (result < 1 || result > 6);
+
+      return result;
+    }
   } 
 }
