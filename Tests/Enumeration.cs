@@ -32,8 +32,11 @@ namespace Tests
       // All possible non-equivalent combinations: there are Binomial(10,5) compositions
       // of 5 into 6 parts in total [see FXT book].
       Assert.AreEqual(252, EnumerateAll(new AllCombinationsEnumerator()));
+      Assert.AreEqual(252, EnumerateAll(EnumeratingDice.Chance));
       Assert.AreEqual(30, EnumerateAll(EnumeratingDice.House));
       Assert.AreEqual(6, EnumerateAll(EnumeratingDice.Yatzy));
+      Assert.AreEqual(1, EnumerateAll(EnumeratingDice.SmallStraight));
+      Assert.AreEqual(1, EnumerateAll(EnumeratingDice.LargeStraight));
     }
 
     [TestMethod]
