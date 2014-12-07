@@ -93,12 +93,35 @@ namespace Tests
     [TestMethod]
     public void Mask_And_Distance_Correctly_Computed() {
       diceFrom.SetValues(new int[] { 2, 3, 3, 5, 2 });
+
+      diceTo.SetValues(new int[] { 5, 3, 3, 2, 2 });
+      comparer.Compare(diceFrom, diceTo);
+      Assert.AreEqual(0, comparer.Distance);
+      Assert.IsTrue(comparer.DiceToHold.All(x => x == true));
+
+      diceTo.SetValues(new int[] { 6, 6, 6, 6, 6 });
+      comparer.Compare(diceFrom, diceTo);
+      Assert.AreEqual(5, comparer.Distance);
+      Assert.IsTrue(comparer.DiceToHold.All(x => x == false));
+
       diceTo.SetValues(new int[] { 2, 3, 3, 2, 2 });
       comparer.Compare(diceFrom, diceTo);
       Assert.AreEqual(1, comparer.Distance);
-      Assert.IsTrue(comparer.DiceToHold.Count(x => !x) == comparer.Distance);
-      int i = comparer.DiceToHold.IndexOf(false);
-      Assert.AreEqual(5, diceFrom.Values[i]);
+      {
+        int i = comparer.DiceToHold.IndexOf(false);
+        Assert.AreEqual(5, diceFrom.Values[i]);
+      }
+
+      diceTo.SetValues(new int[] { 1, 2, 3, 4, 5 });
+      comparer.Compare(diceFrom, diceTo);
+      Assert.AreEqual(2, comparer.Distance);
+      {
+        int sum = 0;
+        for (int i = 0; i < 5; ++i)
+          if (!comparer.DiceToHold[i])
+            sum += diceFrom.Values[i];
+        Assert.AreEqual(5, sum);  // one two and one three
+      }
     }
 
   }
