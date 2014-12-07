@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Yatzy;
 
@@ -88,6 +89,17 @@ namespace Tests
     VerbatimDiceStateSetter diceFrom = new VerbatimDiceStateSetter();
     VerbatimDiceStateSetter diceTo = new VerbatimDiceStateSetter();
     DiceStateComparer comparer = new DiceStateComparer();
+
+    [TestMethod]
+    public void Mask_And_Distance_Correctly_Computed() {
+      diceFrom.SetValues(new int[] { 2, 3, 3, 5, 2 });
+      diceTo.SetValues(new int[] { 2, 3, 3, 2, 2 });
+      comparer.Compare(diceFrom, diceTo);
+      Assert.AreEqual(1, comparer.Distance);
+      Assert.IsTrue(comparer.DiceToHold.Count(x => !x) == comparer.Distance);
+      int i = comparer.DiceToHold.IndexOf(false);
+      Assert.AreEqual(5, diceFrom.Values[i]);
+    }
 
   }
 }

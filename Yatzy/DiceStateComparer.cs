@@ -71,7 +71,9 @@ namespace Yatzy
             --d;
           }
         }
-        Debug.Assert(d == 0);
+        // d above can be negative, but the loop won't run then.
+        // if d was positive, it must decrease to 0 in the loop. 
+        Debug.Assert(d <= 0);
       }
     }
   }
