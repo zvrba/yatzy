@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Yatzy
 {
-  public abstract class EnumeratingDice : DiceState
+  public abstract class EnumeratingDice : DiceState, IEnumerable<EnumeratingDice>
   {
     private const int N = 5;
     private const int K = 6;
@@ -73,6 +74,18 @@ namespace Yatzy
         SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
       }
       return true;
+    }
+
+    public IEnumerator<EnumeratingDice> GetEnumerator() {
+      this.First();
+      yield return this;
+
+      while (this.NextCombination())
+        yield return this;
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() {
+      return this.GetEnumerator();
     }
 
     /// <summary>
