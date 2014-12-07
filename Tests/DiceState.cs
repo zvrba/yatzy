@@ -7,8 +7,6 @@ namespace Tests
 {
   sealed class VerbatimDiceStateSetter : DiceState
   {
-    private int[] providedCounts;
-
     public void SetCounts(int[] counts) {
       Debug.Assert(counts.Length == 7);
       SetState((newCounts) => counts.CopyTo(newCounts, 0));
