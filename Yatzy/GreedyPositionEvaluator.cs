@@ -36,7 +36,7 @@ namespace Yatzy
 
       foreach (var tryState in enumerator) {
         comparer.Compare(state, tryState);
-        
+
         if (comparer.Distance < bestDistance) {
           bestDistance = comparer.Distance;
           bestScore = tryState.CalculateScore();

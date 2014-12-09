@@ -26,6 +26,7 @@ namespace Tests
   public class ScoringTests
   {
     VerbatimDiceStateSetter dice = new VerbatimDiceStateSetter();
+    GreedyPositionEvaluator evaluator = new GreedyPositionEvaluator();
 
     [TestMethod]
     public void Values_Correctly_Synthesized() {
@@ -80,6 +81,26 @@ namespace Tests
       Assert.AreEqual(0, EnumeratingDice.House.CalculateScore(dice));
       Assert.AreEqual(0, EnumeratingDice.Yatzy.CalculateScore(dice));
       Assert.AreEqual(16, EnumeratingDice.Chance.CalculateScore(dice));
+    }
+
+    [TestMethod]
+    public void Position_Correctly_Evaluated() {
+      dice.SetValues(new int[] { 2, 3, 4, 4, 5 });
+
+      evaluator.Evaluate(dice, EnumeratingDice.Chance);
+      Assert.AreEqual(5, evaluator.DiceToHold.Count(x => x));
+      Assert.AreEqual(0, evaluator.Distance);
+      Assert.AreEqual(18, evaluator.PotentialScore);
+
+      evaluator.Evaluate(dice, EnumeratingDice.Yatzy);
+      Assert.AreEqual(2, evaluator.DiceToHold.Count(x => x));
+      Assert.IsTrue(evaluator.DiceToHold[2] && evaluator.DiceToHold[3]);
+      Assert.AreEqual(50, evaluator.PotentialScore);
+
+      evaluator.Evaluate(dice, EnumeratingDice.TwoPairs);
+      Assert.AreEqual(3, evaluator.DiceToHold.Count(x => x));
+      Assert.IsTrue(evaluator.DiceToHold[2] && evaluator.DiceToHold[3] && evaluator.DiceToHold[4]);
+      Assert.AreEqual(14, evaluator.PotentialScore);
     }
   }
 
