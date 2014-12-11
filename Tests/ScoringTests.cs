@@ -100,7 +100,7 @@ namespace Tests
       evaluator.Evaluate(dice, EnumeratingDice.TwoPairs);
       Assert.AreEqual(3, evaluator.DiceToHold.Count(x => x));
       Assert.IsTrue(evaluator.DiceToHold[2] && evaluator.DiceToHold[3] && evaluator.DiceToHold[4]);
-      Assert.AreEqual(14, evaluator.PotentialScore);
+      Assert.AreEqual(18, evaluator.PotentialScore);
     }
   }
 

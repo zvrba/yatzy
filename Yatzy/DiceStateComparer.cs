@@ -45,9 +45,6 @@ namespace Yatzy
       this.from = from;
       this.to = to;
 
-      for (int i = 0; i < 5; ++i)
-        diceToHold[i] = true;
-
       CalculateDistance();
       CalculateDiceToHold();
 
@@ -62,19 +59,23 @@ namespace Yatzy
       distance = d/2;
     }
 
+    // We need to hold on to those dice whose count is smaller than in the target state.
     private void CalculateDiceToHold() {
+      for (int i = 0; i < 5; ++i)
+        diceToHold[i] = true;
+
       for (int v = 1; v < 7; ++v) {
         int d = from.Counts[v] - to.Counts[v];
-        for (int i = 0; i < 5 && d > 0; ++i) {
-          if (from.Values[i] == v) {
-            diceToHold[i] = false;
-            --d;
-          }
-        }
-        // d above can be negative, but the loop won't run then.
-        // if d was positive, it must decrease to 0 in the loop. 
-        Debug.Assert(d <= 0);
+        if (d > 0)
+          ClearHoldForValue(v, d);
       }
+    }
+
+    // Clear the value when count > target count, but clear only the excess
+    private void ClearHoldForValue(int value, int d) {
+      for (int i = 0; i < 5; ++i)
+        if (from.Values[i] == value && d-- > 0)
+          diceToHold[i] = false;
     }
   }
 }
