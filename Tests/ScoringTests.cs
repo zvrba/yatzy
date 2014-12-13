@@ -84,7 +84,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public void Position_Correctly_Evaluated() {
+    public void Position_Correctly_Evaluated_Greedy() {
       dice.SetValues(new int[] { 2, 3, 4, 4, 5 });
 
       evaluator.Evaluate(dice, EnumeratingDice.Chance);
@@ -98,8 +98,8 @@ namespace Tests
       Assert.AreEqual(50, evaluator.PotentialScore);
 
       evaluator.Evaluate(dice, EnumeratingDice.TwoPairs);
-      Assert.AreEqual(3, evaluator.DiceToHold.Count(x => x));
-      Assert.IsTrue(evaluator.DiceToHold[2] && evaluator.DiceToHold[3] && evaluator.DiceToHold[4]);
+      Assert.AreEqual(4, evaluator.DiceToHold.Count(x => x));
+      Assert.IsTrue(!evaluator.DiceToHold[1]);
       Assert.AreEqual(18, evaluator.PotentialScore);
     }
   }
