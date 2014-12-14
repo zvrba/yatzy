@@ -6,7 +6,7 @@ using Yatzy;
 namespace Tests
 {
 
-  sealed class AllCombinationsEnumerator : EnumeratingDice
+  sealed class AllCombinationsEnumerator : PositionEvaluator
   {
     // Returning a positive score accepts every combination.
     public override int CalculateScore(DiceState dice) {
@@ -17,7 +17,7 @@ namespace Tests
   [TestClass]
   public class EnumeratingDiceTests
   {
-    static int EnumerateAll(EnumeratingDice enumerator) {
+    static int EnumerateAll(PositionEvaluator enumerator) {
       enumerator.First();
       int count = 1;
 
@@ -32,11 +32,11 @@ namespace Tests
       // All possible non-equivalent combinations: there are Binomial(10,5) compositions
       // of 5 into 6 parts in total [see FXT book].
       Assert.AreEqual(252, EnumerateAll(new AllCombinationsEnumerator()));
-      Assert.AreEqual(252, EnumerateAll(EnumeratingDice.Chance));
-      Assert.AreEqual(30, EnumerateAll(EnumeratingDice.House));
-      Assert.AreEqual(6, EnumerateAll(EnumeratingDice.Yatzy));
-      Assert.AreEqual(1, EnumerateAll(EnumeratingDice.SmallStraight));
-      Assert.AreEqual(1, EnumerateAll(EnumeratingDice.LargeStraight));
+      Assert.AreEqual(252, EnumerateAll(PositionEvaluator.Chance));
+      Assert.AreEqual(30, EnumerateAll(PositionEvaluator.House));
+      Assert.AreEqual(6, EnumerateAll(PositionEvaluator.Yatzy));
+      Assert.AreEqual(1, EnumerateAll(PositionEvaluator.SmallStraight));
+      Assert.AreEqual(1, EnumerateAll(PositionEvaluator.LargeStraight));
     }
 
     [TestMethod]

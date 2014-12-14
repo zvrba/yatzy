@@ -41,68 +41,68 @@ namespace Tests
     [TestMethod]
     public void Scores_Correctly_Calculated() {
       dice.SetValues(new int[] { 1, 3, 3, 3, 1 });
-      Assert.AreEqual(2, EnumeratingDice.Ones.CalculateScore(dice));
-      Assert.AreEqual(9, EnumeratingDice.Threes.CalculateScore(dice));
-      Assert.AreEqual(6, EnumeratingDice.OnePair.CalculateScore(dice)); // Choose highest pair
-      Assert.AreEqual(9, EnumeratingDice.ThreeOfAKind.CalculateScore(dice));
-      Assert.AreEqual(11, EnumeratingDice.House.CalculateScore(dice));
+      Assert.AreEqual(2, PositionEvaluator.Ones.CalculateScore(dice));
+      Assert.AreEqual(9, PositionEvaluator.Threes.CalculateScore(dice));
+      Assert.AreEqual(6, PositionEvaluator.OnePair.CalculateScore(dice)); // Choose highest pair
+      Assert.AreEqual(9, PositionEvaluator.ThreeOfAKind.CalculateScore(dice));
+      Assert.AreEqual(11, PositionEvaluator.House.CalculateScore(dice));
 
       dice.SetValues(new int[] { 2, 2, 5, 2, 2 });
-      Assert.AreEqual(8, EnumeratingDice.Twos.CalculateScore(dice));
-      Assert.AreEqual(5, EnumeratingDice.Fives.CalculateScore(dice));
-      Assert.AreEqual(8, EnumeratingDice.FourOFAKind.CalculateScore(dice));
-      Assert.AreEqual(6, EnumeratingDice.ThreeOfAKind.CalculateScore(dice));
-      Assert.AreEqual(0, EnumeratingDice.TwoPairs.CalculateScore(dice));
-      Assert.AreEqual(13, EnumeratingDice.Chance.CalculateScore(dice));
+      Assert.AreEqual(8, PositionEvaluator.Twos.CalculateScore(dice));
+      Assert.AreEqual(5, PositionEvaluator.Fives.CalculateScore(dice));
+      Assert.AreEqual(8, PositionEvaluator.FourOFAKind.CalculateScore(dice));
+      Assert.AreEqual(6, PositionEvaluator.ThreeOfAKind.CalculateScore(dice));
+      Assert.AreEqual(0, PositionEvaluator.TwoPairs.CalculateScore(dice));
+      Assert.AreEqual(13, PositionEvaluator.Chance.CalculateScore(dice));
 
       dice.SetValues(new int[] { 6, 1, 6, 4, 4 });
-      Assert.AreEqual(12, EnumeratingDice.Sixes.CalculateScore(dice));
-      Assert.AreEqual(8, EnumeratingDice.Fours.CalculateScore(dice));
-      Assert.AreEqual(20, EnumeratingDice.TwoPairs.CalculateScore(dice));
+      Assert.AreEqual(12, PositionEvaluator.Sixes.CalculateScore(dice));
+      Assert.AreEqual(8, PositionEvaluator.Fours.CalculateScore(dice));
+      Assert.AreEqual(20, PositionEvaluator.TwoPairs.CalculateScore(dice));
 
       dice.SetValues(new int[] { 1, 2, 3, 4, 5 });
-      Assert.AreEqual(15, EnumeratingDice.SmallStraight.CalculateScore(dice));
-      Assert.AreEqual(0, EnumeratingDice.LargeStraight.CalculateScore(dice));
+      Assert.AreEqual(15, PositionEvaluator.SmallStraight.CalculateScore(dice));
+      Assert.AreEqual(0, PositionEvaluator.LargeStraight.CalculateScore(dice));
 
       dice.SetValues(new int[] { 2, 3, 4, 5, 6 });
-      Assert.AreEqual(0, EnumeratingDice.SmallStraight.CalculateScore(dice));
-      Assert.AreEqual(20, EnumeratingDice.LargeStraight.CalculateScore(dice));
+      Assert.AreEqual(0, PositionEvaluator.SmallStraight.CalculateScore(dice));
+      Assert.AreEqual(20, PositionEvaluator.LargeStraight.CalculateScore(dice));
 
       dice.SetValues(new int[] { 3, 3, 3, 3, 3 });
-      Assert.AreEqual(50, EnumeratingDice.Yatzy.CalculateScore(dice));
+      Assert.AreEqual(50, PositionEvaluator.Yatzy.CalculateScore(dice));
 
       dice.SetValues(new int[] { 1, 2, 3, 4, 6 });
-      Assert.AreEqual(0, EnumeratingDice.OnePair.CalculateScore(dice));
-      Assert.AreEqual(0, EnumeratingDice.TwoPairs.CalculateScore(dice));
-      Assert.AreEqual(0, EnumeratingDice.ThreeOfAKind.CalculateScore(dice));
-      Assert.AreEqual(0, EnumeratingDice.FourOFAKind.CalculateScore(dice));
-      Assert.AreEqual(0, EnumeratingDice.SmallStraight.CalculateScore(dice));
-      Assert.AreEqual(0, EnumeratingDice.LargeStraight.CalculateScore(dice));
-      Assert.AreEqual(0, EnumeratingDice.House.CalculateScore(dice));
-      Assert.AreEqual(0, EnumeratingDice.Yatzy.CalculateScore(dice));
-      Assert.AreEqual(16, EnumeratingDice.Chance.CalculateScore(dice));
+      Assert.AreEqual(0, PositionEvaluator.OnePair.CalculateScore(dice));
+      Assert.AreEqual(0, PositionEvaluator.TwoPairs.CalculateScore(dice));
+      Assert.AreEqual(0, PositionEvaluator.ThreeOfAKind.CalculateScore(dice));
+      Assert.AreEqual(0, PositionEvaluator.FourOFAKind.CalculateScore(dice));
+      Assert.AreEqual(0, PositionEvaluator.SmallStraight.CalculateScore(dice));
+      Assert.AreEqual(0, PositionEvaluator.LargeStraight.CalculateScore(dice));
+      Assert.AreEqual(0, PositionEvaluator.House.CalculateScore(dice));
+      Assert.AreEqual(0, PositionEvaluator.Yatzy.CalculateScore(dice));
+      Assert.AreEqual(16, PositionEvaluator.Chance.CalculateScore(dice));
     }
 
     [TestMethod]
     public void Position_Correctly_Evaluated_Greedy() {
       dice.SetValues(new int[] { 2, 3, 4, 4, 5 });
 
-      evaluator.Evaluate(dice, EnumeratingDice.Fours);
+      evaluator.Evaluate(dice, PositionEvaluator.Fours);
       Assert.IsTrue(Array.Equals(new bool[]{false, false, true, true, false}, evaluator.DiceToHold));
       Assert.AreEqual(0, evaluator.Distance);
       Assert.AreEqual(20, evaluator.PotentialScore);
 
-      evaluator.Evaluate(dice, EnumeratingDice.Chance);
+      evaluator.Evaluate(dice, PositionEvaluator.Chance);
       Assert.AreEqual(5, evaluator.DiceToHold.Count(x => x));
       Assert.AreEqual(0, evaluator.Distance);
       Assert.AreEqual(18, evaluator.PotentialScore);
 
-      evaluator.Evaluate(dice, EnumeratingDice.Yatzy);
+      evaluator.Evaluate(dice, PositionEvaluator.Yatzy);
       Assert.AreEqual(2, evaluator.DiceToHold.Count(x => x));
       Assert.IsTrue(evaluator.DiceToHold[2] && evaluator.DiceToHold[3]);
       Assert.AreEqual(50, evaluator.PotentialScore);
 
-      evaluator.Evaluate(dice, EnumeratingDice.TwoPairs);
+      evaluator.Evaluate(dice, PositionEvaluator.TwoPairs);
       Assert.AreEqual(4, evaluator.DiceToHold.Count(x => x));
       Assert.IsTrue(!evaluator.DiceToHold[1]);
       Assert.AreEqual(18, evaluator.PotentialScore);

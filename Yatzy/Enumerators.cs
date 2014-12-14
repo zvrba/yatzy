@@ -6,105 +6,105 @@ using System.Threading.Tasks;
 
 namespace Yatzy.Enumerators
 {
-  public class Ones : EnumeratingDice
+  public class Ones : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.FixedNumber(state, 1);
     }
   }
 
-  public class Twos : EnumeratingDice
+  public class Twos : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.FixedNumber(state, 2);
     }
   }
 
-  public class Threes : EnumeratingDice
+  public class Threes : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.FixedNumber(state, 3);
     }
   }
 
-  public class Fours : EnumeratingDice
+  public class Fours : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.FixedNumber(state, 4);
     }
   }
 
-  public class Fives : EnumeratingDice
+  public class Fives : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.FixedNumber(state, 5);
     }
   }
 
-  public class Sixes : EnumeratingDice
+  public class Sixes : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.FixedNumber(state, 6);
     }
   }
 
-  public class OnePair : EnumeratingDice
+  public class OnePair : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.NOfAKind(state, 2);
     }
   }
 
-  public class TwoPairs : EnumeratingDice
+  public class TwoPairs : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.TwoPairs(state);
     }
   }
 
-  public class ThreeOfAKind : EnumeratingDice
+  public class ThreeOfAKind : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.NOfAKind(state, 3);
     }
   }
 
-  public class FourOFAKind : EnumeratingDice
+  public class FourOFAKind : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.NOfAKind(state, 4);
     }
   }
 
-  public class SmallStraight : EnumeratingDice
+  public class SmallStraight : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.Straight(state, 1);
     }
   }
 
-  public class LargeStraight : EnumeratingDice
+  public class LargeStraight : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.Straight(state, 2);
     }
   }
 
-  public class House : EnumeratingDice
+  public class House : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.House(state);
     }
   }
 
-  public class Chance : EnumeratingDice
+  public class Chance : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.Chance(state);
     }
   }
 
-  public class Yatzy : EnumeratingDice
+  public class Yatzy : PositionEvaluator
   {
     public override int CalculateScore(DiceState state) {
       return ScoreCalculator.Yatzy(state);

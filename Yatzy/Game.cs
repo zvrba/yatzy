@@ -14,16 +14,16 @@ namespace Yatzy
   abstract class AbstractRuleGame
   {
     private readonly RollingDice dice;
-    private readonly int[] scores = new int[EnumeratingDice.Instances.Count];
+    private readonly int[] scores = new int[PositionEvaluator.Instances.Count];
     private readonly ReadOnlyCollection<int> roScores;
     private int bonus;
-    protected readonly GreedyPositionEvaluator[] evaluators = new GreedyPositionEvaluator[EnumeratingDice.Instances.Count];
+    protected readonly GreedyPositionEvaluator[] evaluators = new GreedyPositionEvaluator[PositionEvaluator.Instances.Count];
 
     protected AbstractRuleGame(int seed) {
       seed = (seed+1) * 1711; // Ensure not zero
       dice = new RollingDice(seed);
       roScores = Array.AsReadOnly(scores);
-      for (int i = 0; i < EnumeratingDice.Instances.Count; ++i)
+      for (int i = 0; i < PositionEvaluator.Instances.Count; ++i)
         evaluators[i] = new GreedyPositionEvaluator();
     }
 
@@ -37,7 +37,7 @@ namespace Yatzy
 
     public void Play() {
       ResetScores();
-      for (int round = 0; round < EnumeratingDice.Instances.Count; ++round)
+      for (int round = 0; round < PositionEvaluator.Instances.Count; ++round)
         PlayRound(round);
       SetBonus();
     }
@@ -64,13 +64,13 @@ namespace Yatzy
         dice.Roll(diceToHold);
 
         for (int e = 0; e < evaluators.Length; ++e)
-          evaluators[e].Evaluate(dice, EnumeratingDice.Instances[e]);
+          evaluators[e].Evaluate(dice, PositionEvaluator.Instances[e]);
 
         de = ChooseTarget(i);
         Debug.Assert(scores[de] == -1, "target already used");
         diceToHold = evaluators[de].DiceToHold;
       }
-      scores[de] = EnumeratingDice.Instances[de].CalculateScore(dice);
+      scores[de] = PositionEvaluator.Instances[de].CalculateScore(dice);
     }
   }
 

@@ -16,7 +16,7 @@ namespace Yatzy
 
     static void PrintScores(AbstractRuleGame game) {
       for (int i = 0; i < game.Scores.Count; ++i)
-        Console.Out.WriteLine(EnumeratingDice.Instances[i].Name + ":" + game.Scores[i]);
+        Console.Out.WriteLine(PositionEvaluator.Instances[i].Name + ":" + game.Scores[i]);
     }
   }
 }

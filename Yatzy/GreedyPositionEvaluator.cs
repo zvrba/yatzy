@@ -30,10 +30,11 @@ namespace Yatzy
       get { return bestScore; }
     }
 
-    public void Evaluate(DiceState state, EnumeratingDice enumerator) {
+    public void Evaluate(DiceState state, PositionEvaluator enumerator) {
       bestDistance = 100;
       bestScore = 0;
 
+      // TODO! FIX! Need different evaluation strategy for groups 1 & 2 !
       foreach (var tryState in enumerator) {
         comparer.Compare(state, tryState);
 
