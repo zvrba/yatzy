@@ -6,17 +6,25 @@ using System.Linq;
 
 namespace Yatzy
 {
+  /// <summary>
+  /// Implements the whole game except for the target choosing rule (forced or free).
+  /// <c>Play</c> is the main method, after which <c>Scores</c> and <c>Bonus</c>
+  /// properties become valid.
+  /// </summary>
   abstract class AbstractRuleGame
   {
     private readonly RollingDice dice;
     private readonly int[] scores = new int[EnumeratingDice.Instances.Count];
     private readonly ReadOnlyCollection<int> roScores;
     private int bonus;
+    protected readonly GreedyPositionEvaluator[] evaluators = new GreedyPositionEvaluator[EnumeratingDice.Instances.Count];
 
     protected AbstractRuleGame(int seed) {
       seed = (seed+1) * 1711; // Ensure not zero
       dice = new RollingDice(seed);
       roScores = Array.AsReadOnly(scores);
+      for (int i = 0; i < 13; ++i)
+        evaluators[i] = new GreedyPositionEvaluator();
     }
 
     public ReadOnlyCollection<int> Scores {
@@ -49,21 +57,34 @@ namespace Yatzy
     }
 
     private void PlayRound(int round) {
-      int de;
+      bool[] diceToHold = null;
+      int de = -1;
 
-      dice.Roll();
-      de = ChooseTarget(2);
-      Debug.Assert(scores[de] == -1, "already used evaluator");
+      for (int i = 2; i >= 0; --i) {
+        dice.Roll(diceToHold);
 
-      dice.Roll(evaluators[de].DiceToHold);
-      de = ChooseTarget(1);
-      Debug.Assert(scores[de] == -1, "already used evaluator");
+        for (int e = 0; e < evaluators.Length; ++e)
+          evaluators[e].Evaluate(dice, EnumeratingDice.Instances[e]);
 
-      dice.Roll(evaluators[de].DiceToHold);
-      de = ChooseTarget(0);
-      Debug.Assert(scores[de] == -1, "already used evaluator");
+        de = ChooseTarget(i);
+        Debug.Assert(scores[de] == -1, "target already used");
+        diceToHold = evaluators[de].DiceToHold;
+      }
+      scores[de] = EnumeratingDice.Instances[de].CalculateScore(dice);
+    }
+  }
 
-      // scores[de] = evaluators[de].Score;
+  /// <summary>
+  /// Play in forced order, i.e., as written on the scoring card.
+  /// </summary>
+  sealed class ForcedRuleGame : AbstractRuleGame
+  {
+    public ForcedRuleGame(int seed) : base(seed) { }
+
+    protected override int ChooseTarget(int throwsLeft) {
+      int i = this.Scores.IndexOf(-1);
+      Debug.Assert(i != -1, "logic error; called too many times");
+      return i;
     }
   }
 }
