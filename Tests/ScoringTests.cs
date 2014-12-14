@@ -87,6 +87,11 @@ namespace Tests
     public void Position_Correctly_Evaluated_Greedy() {
       dice.SetValues(new int[] { 2, 3, 4, 4, 5 });
 
+      evaluator.Evaluate(dice, EnumeratingDice.Fours);
+      Assert.IsTrue(Array.Equals(new bool[]{false, false, true, true, false}, evaluator.DiceToHold));
+      Assert.AreEqual(0, evaluator.Distance);
+      Assert.AreEqual(20, evaluator.PotentialScore);
+
       evaluator.Evaluate(dice, EnumeratingDice.Chance);
       Assert.AreEqual(5, evaluator.DiceToHold.Count(x => x));
       Assert.AreEqual(0, evaluator.Distance);
