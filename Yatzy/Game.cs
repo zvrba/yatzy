@@ -23,7 +23,7 @@ namespace Yatzy
       seed = (seed+1) * 1711; // Ensure not zero
       dice = new RollingDice(seed);
       roScores = Array.AsReadOnly(scores);
-      for (int i = 0; i < 13; ++i)
+      for (int i = 0; i < EnumeratingDice.Instances.Count; ++i)
         evaluators[i] = new GreedyPositionEvaluator();
     }
 
