@@ -17,14 +17,11 @@ namespace Yatzy
     private readonly int[] scores = new int[PositionEvaluator.Instances.Count];
     private readonly ReadOnlyCollection<int> roScores;
     private int bonus;
-    protected readonly GreedyPositionEvaluator[] evaluators = new GreedyPositionEvaluator[PositionEvaluator.Instances.Count];
 
     protected AbstractRuleGame(int seed) {
       seed = (seed+1) * 1711; // Ensure not zero
       dice = new RollingDice(seed);
       roScores = Array.AsReadOnly(scores);
-      for (int i = 0; i < PositionEvaluator.Instances.Count; ++i)
-        evaluators[i] = new GreedyPositionEvaluator();
     }
 
     public ReadOnlyCollection<int> Scores {
@@ -63,12 +60,12 @@ namespace Yatzy
       for (int i = 2; i >= 0; --i) {
         dice.Roll(diceToHold);
 
-        for (int e = 0; e < evaluators.Length; ++e)
-          evaluators[e].Evaluate(dice, PositionEvaluator.Instances[e]);
+        for (int e = 0; e < scores.Length; ++e)
+          PositionEvaluator.Instances[e].EvaluatePosition(dice);
 
         de = ChooseTarget(i);
         Debug.Assert(scores[de] == -1, "target already used");
-        diceToHold = evaluators[de].DiceToHold;
+        diceToHold = PositionEvaluator.Instances[de].DiceToHold;
       }
       scores[de] = PositionEvaluator.Instances[de].CalculateScore(dice);
     }

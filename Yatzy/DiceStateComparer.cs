@@ -13,19 +13,14 @@ namespace Yatzy
   public class DiceStateComparer
   {
     private readonly bool[] diceToHold = new bool[5];
-    private readonly ReadOnlyCollection<bool> readOnlyDiceToHold;
     private int distance;
     private DiceState from, to;
-
-    public DiceStateComparer() {
-      readOnlyDiceToHold = new ReadOnlyCollection<bool>(diceToHold);
-    }
 
     /// <summary>
     /// Dice to hold in the next roll, computed wrt the actual dice state given to <see cref="Compare"/>.
     /// </summary>
-    public ReadOnlyCollection<bool> DiceToHold {
-      get { return readOnlyDiceToHold; }
+    public bool[] DiceToHold {
+      get { return diceToHold; }
     }
 
     /// <summary>

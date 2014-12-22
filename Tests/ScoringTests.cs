@@ -26,7 +26,6 @@ namespace Tests
   public class ScoringTests
   {
     VerbatimDiceStateSetter dice = new VerbatimDiceStateSetter();
-    GreedyPositionEvaluator evaluator = new GreedyPositionEvaluator();
 
     [TestMethod]
     public void Values_Correctly_Synthesized() {
@@ -85,24 +84,33 @@ namespace Tests
 
     [TestMethod]
     public void Position_Correctly_Evaluated_Greedy() {
+      PositionEvaluator evaluator;
       dice.SetValues(new int[] { 2, 3, 4, 4, 5 });
 
-      evaluator.Evaluate(dice, PositionEvaluator.Fours);
-      Assert.IsTrue(Array.Equals(new bool[]{false, false, true, true, false}, evaluator.DiceToHold));
+      evaluator = PositionEvaluator.Fours;
+      evaluator.EvaluatePosition(dice);
+      {
+        var expected = new bool[]{false, false, true, true, false};
+        for (int i = 0; i < 5; ++i)
+          Assert.AreEqual(expected[i], evaluator.DiceToHold[i]);
+      }
       Assert.AreEqual(0, evaluator.Distance);
       Assert.AreEqual(20, evaluator.PotentialScore);
 
-      evaluator.Evaluate(dice, PositionEvaluator.Chance);
+      evaluator = PositionEvaluator.Chance;
+      evaluator.EvaluatePosition(dice);
       Assert.AreEqual(5, evaluator.DiceToHold.Count(x => x));
       Assert.AreEqual(0, evaluator.Distance);
       Assert.AreEqual(18, evaluator.PotentialScore);
 
-      evaluator.Evaluate(dice, PositionEvaluator.Yatzy);
+      evaluator = PositionEvaluator.Yatzy;
+      evaluator.EvaluatePosition(dice);
       Assert.AreEqual(2, evaluator.DiceToHold.Count(x => x));
       Assert.IsTrue(evaluator.DiceToHold[2] && evaluator.DiceToHold[3]);
       Assert.AreEqual(50, evaluator.PotentialScore);
 
-      evaluator.Evaluate(dice, PositionEvaluator.TwoPairs);
+      evaluator = PositionEvaluator.TwoPairs;
+      evaluator.EvaluatePosition(dice);
       Assert.AreEqual(4, evaluator.DiceToHold.Count(x => x));
       Assert.IsTrue(!evaluator.DiceToHold[1]);
       Assert.AreEqual(18, evaluator.PotentialScore);
@@ -134,7 +142,9 @@ namespace Tests
       comparer.Compare(diceFrom, diceTo);
       Assert.AreEqual(1, comparer.Distance);
       {
-        int i = comparer.DiceToHold.IndexOf(false);
+        int i;
+        for (i = 0; i < 5 && comparer.DiceToHold[i]; ++i)
+          ;
         Assert.AreEqual(5, diceFrom.Values[i]);
       }
 

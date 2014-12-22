@@ -45,9 +45,8 @@
     <Compile Include="DiceStateComparer.cs" />
     <Compile Include="DiceState.cs" />
     <Compile Include="PositionEvaluator.cs" />
-    <Compile Include="Enumerators.cs" />
+    <Compile Include="PositionEvaluators.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GreedyPositionEvaluator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RollingDice.cs" />

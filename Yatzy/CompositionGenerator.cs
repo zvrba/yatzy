@@ -23,7 +23,7 @@ namespace Yatzy
   /// class to be able to use a state-vector provided by the user.
   /// </para>
   /// </remarks>
-  class CompositionGenerator : IEnumerable<int[]>
+  public class CompositionGenerator : IEnumerable<int[]>
   {
     private readonly int n, k;
     private readonly int[] x;
