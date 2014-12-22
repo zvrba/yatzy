@@ -22,9 +22,7 @@ namespace Tests
 
         bool isEqual = true;
         for (int j = 1; isEqual && j < 7; ++j)
-          if (rolling.Counts[j] != oldCounts[j])
-            isEqual = false;
-
+          isEqual = rolling.Counts[j] == oldCounts[j];
         if (isEqual)
           ++equalCount;
       }

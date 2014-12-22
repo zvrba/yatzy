@@ -9,7 +9,7 @@ namespace Yatzy
   class Program
   {
     static void Main(string[] args) {
-      var game = new ForcedRuleGame(19283);
+      var game = new ForcedRuleGame(19284);
       game.Play();
       PrintScores(game);
     }
