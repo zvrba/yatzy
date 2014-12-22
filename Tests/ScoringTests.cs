@@ -94,7 +94,7 @@ namespace Tests
         for (int i = 0; i < 5; ++i)
           Assert.AreEqual(expected[i], evaluator.DiceToHold[i]);
       }
-      Assert.AreEqual(0, evaluator.Distance);
+      Assert.AreEqual(3, evaluator.Distance);
       Assert.AreEqual(20, evaluator.PotentialScore);
 
       evaluator = PositionEvaluator.Chance;

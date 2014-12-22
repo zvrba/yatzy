@@ -59,27 +59,31 @@ namespace Yatzy.PositionEvaluators
     }
 
     public sealed override void EvaluatePosition(DiceState dice) {
+      distance = 6;
       First();
       do {
         SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
         comparer.Compare(dice, this);
+        RememberStateIfBetter();
+      } while (Next());
+      SetState((newCounts) => counts.CopyTo(newCounts, 0));
+    }
 
-        if (comparer.Distance < distance) {
-          distance = comparer.Distance;
-          score = CalculateScore(this);
+    private void RememberStateIfBetter() {
+      if (comparer.Distance < distance) {
+        distance = comparer.Distance;
+        score = CalculateScore(this);
+        comparer.DiceToHold.CopyTo(diceToHold, 0);
+        this.Counts.CopyTo(counts, 0);
+      }
+      else if (comparer.Distance == distance) {
+        int tryScore = CalculateScore(this);
+        if (tryScore > score) {
+          score = tryScore;
           comparer.DiceToHold.CopyTo(diceToHold, 0);
           this.Counts.CopyTo(counts, 0);
         }
-        else if (comparer.Distance == distance) {
-          int tryScore = CalculateScore(this);
-          if (tryScore > score) {
-            score = tryScore;
-            comparer.DiceToHold.CopyTo(diceToHold, 0);
-            this.Counts.CopyTo(counts, 0);
-          }
-        }
-      } while (Next());
-      SetState((newCounts) => counts.CopyTo(newCounts, 0));
+      }
     }
 
     private void First() {
