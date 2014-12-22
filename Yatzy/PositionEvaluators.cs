@@ -70,19 +70,15 @@ namespace Yatzy.PositionEvaluators
     }
 
     private void RememberStateIfBetter() {
-      if (comparer.Distance < distance) {
+      int tryScore = CalculateScore(this);
+      bool shouldRemember = (comparer.Distance < distance) ||
+        (comparer.Distance == distance && tryScore > score);
+
+      if (shouldRemember) {
         distance = comparer.Distance;
-        score = CalculateScore(this);
+        score = tryScore;
         comparer.DiceToHold.CopyTo(diceToHold, 0);
         this.Counts.CopyTo(counts, 0);
-      }
-      else if (comparer.Distance == distance) {
-        int tryScore = CalculateScore(this);
-        if (tryScore > score) {
-          score = tryScore;
-          comparer.DiceToHold.CopyTo(diceToHold, 0);
-          this.Counts.CopyTo(counts, 0);
-        }
       }
     }
 
