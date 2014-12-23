@@ -11,7 +11,7 @@ namespace Yatzy
   /// <c>Play</c> is the main method, after which <c>Scores</c> and <c>Bonus</c>
   /// properties become valid.
   /// </summary>
-  abstract class AbstractRuleGame
+  public abstract class AbstractRuleGame
   {
     private readonly RollingDice dice;
     private readonly int[] scores = new int[PositionEvaluator.Count];
@@ -75,7 +75,7 @@ namespace Yatzy
   /// <summary>
   /// Play in forced order, i.e., as written on the scoring card.
   /// </summary>
-  sealed class ForcedRuleGame : AbstractRuleGame
+  public sealed class ForcedRuleGame : AbstractRuleGame
   {
     public ForcedRuleGame(int seed) : base(seed) { }
 
