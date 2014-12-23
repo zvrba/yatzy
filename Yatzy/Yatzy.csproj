@@ -44,6 +44,7 @@
     <Compile Include="CompositionGenerator.cs" />
     <Compile Include="DiceStateComparer.cs" />
     <Compile Include="DiceState.cs" />
+    <Compile Include="EnumeratingDice.cs" />
     <Compile Include="PositionEvaluator.cs" />
     <Compile Include="PositionEvaluators.cs" />
     <Compile Include="Game.cs" />

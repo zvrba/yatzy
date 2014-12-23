@@ -37,15 +37,13 @@ namespace Yatzy
       ValidateValues();
     }
 
-    protected delegate void StateSetter(int[] newCounts);
-
     /// <summary>
     /// Call the provided delegate to update the state.  The delegate can access the current
     /// state through Values and Counts properties and must fill in the passed-in array with
     /// the new state. The new state array does not alias the existing state, and is zero-
     /// initialized.
     /// </summary>
-    protected void SetState(StateSetter stateSetter) {
+    protected void SetState(Action<int[]> stateSetter) {
       for (int i = 0; i < newCounts.Length; ++i)
         newCounts[i] = 0;
       stateSetter(newCounts);

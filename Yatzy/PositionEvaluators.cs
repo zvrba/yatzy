@@ -42,13 +42,15 @@ namespace Yatzy.PositionEvaluators
   /// </summary>
   public abstract class GreedyPatternEvaluator : PositionEvaluator
   {
-    private const int N = 5;
-    private const int K = 6;
-    private readonly CompositionGenerator generator = new CompositionGenerator(N, K);
+    private EnumeratingDice dice;
     private int[] counts = new int[7];
     private bool[] diceToHold = new bool[5];
     private int distance;
     private int score;
+
+    protected GreedyPatternEvaluator() {
+      dice = new EnumeratingDice((state) => this.CalculateScore(dice) > 0);
+    }
 
     public override bool[] DiceToHold {
       get { return diceToHold; }
@@ -60,12 +62,10 @@ namespace Yatzy.PositionEvaluators
 
     public sealed override void EvaluatePosition(DiceState dice) {
       distance = 6;
-      First();
-      do {
-        SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
-        comparer.Compare(dice, this);
+      foreach (var state in this.dice) {
+        comparer.Compare(dice, this.dice);
         RememberStateIfBetter();
-      } while (Next());
+      }
       SetState((newCounts) => counts.CopyTo(newCounts, 0));
     }
 
@@ -81,30 +81,6 @@ namespace Yatzy.PositionEvaluators
         this.Counts.CopyTo(counts, 0);
       }
     }
-
-    private void First() {
-      generator.First();
-      SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
-      if (!AdvanceToValidCombination())
-        throw new ApplicationException("no valid combinations in this instance");
-    }
-
-    private bool Next() {
-      if (generator.Next() == K)
-        return false;
-      SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
-      return AdvanceToValidCombination();
-    }
-
-    private bool AdvanceToValidCombination() {
-      while (CalculateScore(this) == 0) {
-        if (generator.Next() == K)
-          return false;
-        SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
-      }
-      return true;
-    }
-
   }
 
   public sealed class Ones : FixedNumberEvaluator

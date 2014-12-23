@@ -11,11 +11,11 @@ namespace Tests
   {
     [TestMethod]
     public void All_Compositions_Enumerated_Manual() {
-      var generator = new CompositionGenerator(5, 6);
+      var dice = new EnumeratingDice(null);
 
-      generator.First();
+      dice.First();
       int count = 1;
-      while (generator.Next() != 6)
+      while (dice.Next())
         ++count;
 
       Assert.AreEqual(252, count);
@@ -23,9 +23,9 @@ namespace Tests
 
     [TestMethod]
     public void All_Compositions_Enumerated_Foreach() {
-      var generator = new CompositionGenerator(5, 6);
+      var dice = new EnumeratingDice(null);
       int count = 0;
-      foreach (var state in generator)
+      foreach (var state in dice)
         ++count;
       Assert.AreEqual(252, count);
     }
