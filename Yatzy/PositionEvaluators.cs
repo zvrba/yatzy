@@ -9,22 +9,31 @@ namespace Yatzy.PositionEvaluators
 {
   public abstract class FixedNumberEvaluator : PositionEvaluator
   {
+    class FixedNumberDiceState : DiceState
+    {
+      public FixedNumberDiceState(int number) {
+        SetState((newState) => newState[number] = 5);
+      }
+    }
+
     private readonly int targetNumber;
+    private readonly FixedNumberDiceState targetState;
 
     protected FixedNumberEvaluator(int targetNumber) {
       this.targetNumber = targetNumber;
-
-      int[] targetCounts = new int[7];
-      targetCounts[targetNumber] = 5;
-      SetState((newCounts) => targetCounts.CopyTo(newCounts, 0));
+      this.targetState = new FixedNumberDiceState(targetNumber);
     }
 
-    public override bool[] DiceToHold {
+    public sealed override bool[] DiceToHold {
       get { return comparer.DiceToHold; }
     }
 
-    public override int Distance {
+    public sealed override int Distance {
       get { return comparer.Distance; }
+    }
+
+    public sealed override int PotentialScore {
+      get { return 5*targetNumber; }
     }
 
     public sealed override int CalculateScore(DiceState dice) {
@@ -32,7 +41,7 @@ namespace Yatzy.PositionEvaluators
     }
 
     public sealed override void EvaluatePosition(DiceState dice) {
-      comparer.Compare(dice, this);
+      comparer.Compare(dice, this.targetState);
     }
   }
  
@@ -49,28 +58,31 @@ namespace Yatzy.PositionEvaluators
     private int score;
 
     protected GreedyPatternEvaluator() {
-      dice = new EnumeratingDice((state) => this.CalculateScore(dice) > 0);
+      dice = new EnumeratingDice((state) => { return this.CalculateScore(dice) > 0; });
     }
 
-    public override bool[] DiceToHold {
+    public sealed override bool[] DiceToHold {
       get { return diceToHold; }
     }
 
-    public override int Distance {
+    public sealed override int Distance {
       get { return distance; }
     }
 
+    public sealed override int PotentialScore {
+      get { return score; }
+    }
+
     public sealed override void EvaluatePosition(DiceState dice) {
-      distance = 6;
+      distance = 100;
       foreach (var state in this.dice) {
         comparer.Compare(dice, this.dice);
         RememberStateIfBetter();
       }
-      SetState((newCounts) => counts.CopyTo(newCounts, 0));
     }
 
     private void RememberStateIfBetter() {
-      int tryScore = CalculateScore(this);
+      int tryScore = CalculateScore(this.dice);
       bool shouldRemember = (comparer.Distance < distance) ||
         (comparer.Distance == distance && tryScore > score);
 
@@ -78,7 +90,7 @@ namespace Yatzy.PositionEvaluators
         distance = comparer.Distance;
         score = tryScore;
         comparer.DiceToHold.CopyTo(diceToHold, 0);
-        this.Counts.CopyTo(counts, 0);
+        this.dice.Counts.CopyTo(counts, 0);
       }
     }
   }

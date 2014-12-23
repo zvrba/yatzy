@@ -26,6 +26,7 @@ namespace Tests
   public class ScoringTests
   {
     VerbatimDiceStateSetter dice = new VerbatimDiceStateSetter();
+    PositionEvaluator[] ev = PositionEvaluator.CreateInstances();
 
     [TestMethod]
     public void Values_Correctly_Synthesized() {
@@ -40,46 +41,46 @@ namespace Tests
     [TestMethod]
     public void Scores_Correctly_Calculated() {
       dice.SetValues(new int[] { 1, 3, 3, 3, 1 });
-      Assert.AreEqual(2, PositionEvaluator.Ones.CalculateScore(dice));
-      Assert.AreEqual(9, PositionEvaluator.Threes.CalculateScore(dice));
-      Assert.AreEqual(6, PositionEvaluator.OnePair.CalculateScore(dice)); // Choose highest pair
-      Assert.AreEqual(9, PositionEvaluator.ThreeOfAKind.CalculateScore(dice));
-      Assert.AreEqual(11, PositionEvaluator.House.CalculateScore(dice));
+      Assert.AreEqual(2,  ev[PositionEvaluator.Ones].CalculateScore(dice));
+      Assert.AreEqual(9,  ev[PositionEvaluator.Threes].CalculateScore(dice));
+      Assert.AreEqual(6,  ev[PositionEvaluator.OnePair].CalculateScore(dice)); // Choose highest pair
+      Assert.AreEqual(9,  ev[PositionEvaluator.ThreeOfAKind].CalculateScore(dice));
+      Assert.AreEqual(11, ev[PositionEvaluator.House].CalculateScore(dice));
 
       dice.SetValues(new int[] { 2, 2, 5, 2, 2 });
-      Assert.AreEqual(8, PositionEvaluator.Twos.CalculateScore(dice));
-      Assert.AreEqual(5, PositionEvaluator.Fives.CalculateScore(dice));
-      Assert.AreEqual(8, PositionEvaluator.FourOFAKind.CalculateScore(dice));
-      Assert.AreEqual(6, PositionEvaluator.ThreeOfAKind.CalculateScore(dice));
-      Assert.AreEqual(0, PositionEvaluator.TwoPairs.CalculateScore(dice));
-      Assert.AreEqual(13, PositionEvaluator.Chance.CalculateScore(dice));
+      Assert.AreEqual(8,  ev[PositionEvaluator.Twos].CalculateScore(dice));
+      Assert.AreEqual(5,  ev[PositionEvaluator.Fives].CalculateScore(dice));
+      Assert.AreEqual(8,  ev[PositionEvaluator.FourOFAKind].CalculateScore(dice));
+      Assert.AreEqual(6,  ev[PositionEvaluator.ThreeOfAKind].CalculateScore(dice));
+      Assert.AreEqual(0,  ev[PositionEvaluator.TwoPairs].CalculateScore(dice));
+      Assert.AreEqual(13, ev[PositionEvaluator.Chance].CalculateScore(dice));
 
       dice.SetValues(new int[] { 6, 1, 6, 4, 4 });
-      Assert.AreEqual(12, PositionEvaluator.Sixes.CalculateScore(dice));
-      Assert.AreEqual(8, PositionEvaluator.Fours.CalculateScore(dice));
-      Assert.AreEqual(20, PositionEvaluator.TwoPairs.CalculateScore(dice));
+      Assert.AreEqual(12, ev[PositionEvaluator.Sixes].CalculateScore(dice));
+      Assert.AreEqual(8,  ev[PositionEvaluator.Fours].CalculateScore(dice));
+      Assert.AreEqual(20, ev[PositionEvaluator.TwoPairs].CalculateScore(dice));
 
       dice.SetValues(new int[] { 1, 2, 3, 4, 5 });
-      Assert.AreEqual(15, PositionEvaluator.SmallStraight.CalculateScore(dice));
-      Assert.AreEqual(0, PositionEvaluator.LargeStraight.CalculateScore(dice));
+      Assert.AreEqual(15, ev[PositionEvaluator.SmallStraight].CalculateScore(dice));
+      Assert.AreEqual(0,  ev[PositionEvaluator.LargeStraight].CalculateScore(dice));
 
       dice.SetValues(new int[] { 2, 3, 4, 5, 6 });
-      Assert.AreEqual(0, PositionEvaluator.SmallStraight.CalculateScore(dice));
-      Assert.AreEqual(20, PositionEvaluator.LargeStraight.CalculateScore(dice));
+      Assert.AreEqual(0,  ev[PositionEvaluator.SmallStraight].CalculateScore(dice));
+      Assert.AreEqual(20, ev[PositionEvaluator.LargeStraight].CalculateScore(dice));
 
       dice.SetValues(new int[] { 3, 3, 3, 3, 3 });
-      Assert.AreEqual(50, PositionEvaluator.Yatzy.CalculateScore(dice));
+      Assert.AreEqual(50, ev[PositionEvaluator.Yatzy].CalculateScore(dice));
 
       dice.SetValues(new int[] { 1, 2, 3, 4, 6 });
-      Assert.AreEqual(0, PositionEvaluator.OnePair.CalculateScore(dice));
-      Assert.AreEqual(0, PositionEvaluator.TwoPairs.CalculateScore(dice));
-      Assert.AreEqual(0, PositionEvaluator.ThreeOfAKind.CalculateScore(dice));
-      Assert.AreEqual(0, PositionEvaluator.FourOFAKind.CalculateScore(dice));
-      Assert.AreEqual(0, PositionEvaluator.SmallStraight.CalculateScore(dice));
-      Assert.AreEqual(0, PositionEvaluator.LargeStraight.CalculateScore(dice));
-      Assert.AreEqual(0, PositionEvaluator.House.CalculateScore(dice));
-      Assert.AreEqual(0, PositionEvaluator.Yatzy.CalculateScore(dice));
-      Assert.AreEqual(16, PositionEvaluator.Chance.CalculateScore(dice));
+      Assert.AreEqual(0,  ev[PositionEvaluator.Yatzy].CalculateScore(dice));
+      Assert.AreEqual(0,  ev[PositionEvaluator.OnePair].CalculateScore(dice));
+      Assert.AreEqual(0,  ev[PositionEvaluator.TwoPairs].CalculateScore(dice));
+      Assert.AreEqual(0,  ev[PositionEvaluator.ThreeOfAKind].CalculateScore(dice));
+      Assert.AreEqual(0,  ev[PositionEvaluator.FourOFAKind].CalculateScore(dice));
+      Assert.AreEqual(0,  ev[PositionEvaluator.SmallStraight].CalculateScore(dice));
+      Assert.AreEqual(0,  ev[PositionEvaluator.LargeStraight].CalculateScore(dice));
+      Assert.AreEqual(0,  ev[PositionEvaluator.House].CalculateScore(dice));
+      Assert.AreEqual(16, ev[PositionEvaluator.Chance].CalculateScore(dice));
     }
 
     [TestMethod]
@@ -87,7 +88,7 @@ namespace Tests
       PositionEvaluator evaluator;
       dice.SetValues(new int[] { 2, 3, 4, 4, 5 });
 
-      evaluator = PositionEvaluator.Fours;
+      evaluator = ev[PositionEvaluator.Fours];
       evaluator.EvaluatePosition(dice);
       {
         var expected = new bool[]{false, false, true, true, false};
@@ -97,19 +98,19 @@ namespace Tests
       Assert.AreEqual(3, evaluator.Distance);
       Assert.AreEqual(20, evaluator.PotentialScore);
 
-      evaluator = PositionEvaluator.Chance;
+      evaluator = ev[PositionEvaluator.Chance];
       evaluator.EvaluatePosition(dice);
       Assert.AreEqual(5, evaluator.DiceToHold.Count(x => x));
       Assert.AreEqual(0, evaluator.Distance);
       Assert.AreEqual(18, evaluator.PotentialScore);
 
-      evaluator = PositionEvaluator.Yatzy;
+      evaluator = ev[PositionEvaluator.Yatzy];
       evaluator.EvaluatePosition(dice);
       Assert.AreEqual(2, evaluator.DiceToHold.Count(x => x));
       Assert.IsTrue(evaluator.DiceToHold[2] && evaluator.DiceToHold[3]);
       Assert.AreEqual(50, evaluator.PotentialScore);
 
-      evaluator = PositionEvaluator.TwoPairs;
+      evaluator = ev[PositionEvaluator.TwoPairs];
       evaluator.EvaluatePosition(dice);
       Assert.AreEqual(4, evaluator.DiceToHold.Count(x => x));
       Assert.IsTrue(!evaluator.DiceToHold[1]);

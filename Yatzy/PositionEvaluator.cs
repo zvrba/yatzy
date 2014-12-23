@@ -12,34 +12,48 @@ namespace Yatzy
   /// from the evaluated position.  Additional attributes are exposed for directing gameplay:
   /// <c>DiceToHold</c>, <c>Distance</c> and <c></c>
   /// </summary>
-  public abstract class PositionEvaluator : DiceState
+  public abstract class PositionEvaluator
   {
-    protected readonly DiceStateComparer comparer = new DiceStateComparer();
-
-    #region Named instances
-    public static readonly PositionEvaluator Ones = new Yatzy.PositionEvaluators.Ones();
-    public static readonly PositionEvaluator Twos = new Yatzy.PositionEvaluators.Twos();
-    public static readonly PositionEvaluator Threes = new Yatzy.PositionEvaluators.Threes();
-    public static readonly PositionEvaluator Fours = new Yatzy.PositionEvaluators.Fours();
-    public static readonly PositionEvaluator Fives = new Yatzy.PositionEvaluators.Fives();
-    public static readonly PositionEvaluator Sixes = new Yatzy.PositionEvaluators.Sixes();
-    public static readonly PositionEvaluator OnePair = new Yatzy.PositionEvaluators.OnePair();
-    public static readonly PositionEvaluator TwoPairs = new Yatzy.PositionEvaluators.TwoPairs();
-    public static readonly PositionEvaluator ThreeOfAKind = new Yatzy.PositionEvaluators.ThreeOfAKind();
-    public static readonly PositionEvaluator FourOFAKind = new Yatzy.PositionEvaluators.FourOFAKind();
-    public static readonly PositionEvaluator SmallStraight = new Yatzy.PositionEvaluators.SmallStraight();
-    public static readonly PositionEvaluator LargeStraight = new Yatzy.PositionEvaluators.LargeStraight();
-    public static readonly PositionEvaluator House = new Yatzy.PositionEvaluators.House();
-    public static readonly PositionEvaluator Chance = new Yatzy.PositionEvaluators.Chance();
-    public static readonly PositionEvaluator Yatzy = new Yatzy.PositionEvaluators.Yatzy();
+    #region Instance name to index map
+    public const int Ones = 0;
+    public const int Twos = 1;
+    public const int Threes = 2;
+    public const int Fours = 3;
+    public const int Fives = 4;
+    public const int Sixes = 5;
+    public const int OnePair = 6;
+    public const int TwoPairs = 7;
+    public const int ThreeOfAKind = 8;
+    public const int FourOFAKind = 9;
+    public const int SmallStraight = 10;
+    public const int LargeStraight = 11;
+    public const int House = 12;
+    public const int Chance = 13;
+    public const int Yatzy = 14;
+    public const int Count = 15;
     #endregion
 
-    private static readonly PositionEvaluator[] instances = new PositionEvaluator[] {
-      Ones, Twos, Threes, Fours, Fives, Sixes, OnePair, TwoPairs, ThreeOfAKind,
-      FourOFAKind, SmallStraight, LargeStraight, House, Chance, Yatzy
-    };
+    public static PositionEvaluator[] CreateInstances() {
+      return new PositionEvaluator[] {
+        new Yatzy.PositionEvaluators.Ones(),
+        new Yatzy.PositionEvaluators.Twos(),
+        new Yatzy.PositionEvaluators.Threes(),
+        new Yatzy.PositionEvaluators.Fours(),
+        new Yatzy.PositionEvaluators.Fives(),
+        new Yatzy.PositionEvaluators.Sixes(),
+        new Yatzy.PositionEvaluators.OnePair(),
+        new Yatzy.PositionEvaluators.TwoPairs(),
+        new Yatzy.PositionEvaluators.ThreeOfAKind(),
+        new Yatzy.PositionEvaluators.FourOFAKind(),
+        new Yatzy.PositionEvaluators.SmallStraight(),
+        new Yatzy.PositionEvaluators.LargeStraight(),
+        new Yatzy.PositionEvaluators.House(),
+        new Yatzy.PositionEvaluators.Chance(),
+        new Yatzy.PositionEvaluators.Yatzy()
+      };
+    }
 
-    public static readonly ReadOnlyCollection<PositionEvaluator> Instances = Array.AsReadOnly(instances);
+    protected readonly DiceStateComparer comparer = new DiceStateComparer();
 
     /// <summary>
     /// Return the name of evaluator.
@@ -64,9 +78,7 @@ namespace Yatzy
     /// Return the score achievable by the evaluated state.
     /// Set by <c>EvaluatePosition</c>.
     /// </summary>
-    public int PotentialScore {
-      get { return CalculateScore(this); }
-    }
+    public abstract int PotentialScore { get; }
 
     /// <summary>
     /// Returns score for the given state wrt a pattern.

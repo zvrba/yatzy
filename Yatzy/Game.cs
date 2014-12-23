@@ -14,8 +14,9 @@ namespace Yatzy
   abstract class AbstractRuleGame
   {
     private readonly RollingDice dice;
-    private readonly int[] scores = new int[PositionEvaluator.Instances.Count];
+    private readonly int[] scores = new int[PositionEvaluator.Count];
     private readonly ReadOnlyCollection<int> roScores;
+    private readonly PositionEvaluator[] evaluators = PositionEvaluator.CreateInstances();
     private int bonus;
 
     protected AbstractRuleGame(int seed) {
@@ -34,7 +35,7 @@ namespace Yatzy
 
     public void Play() {
       ResetScores();
-      for (int round = 0; round < PositionEvaluator.Instances.Count; ++round)
+      for (int round = 0; round < evaluators.Length; ++round)
         PlayRound(round);
       SetBonus();
     }
@@ -61,13 +62,13 @@ namespace Yatzy
         dice.Roll(diceToHold);
 
         for (int e = 0; e < scores.Length; ++e)
-          PositionEvaluator.Instances[e].EvaluatePosition(dice);
+          evaluators[e].EvaluatePosition(dice);
 
         de = ChooseTarget(i);
         Debug.Assert(scores[de] == -1, "target already used");
-        diceToHold = PositionEvaluator.Instances[de].DiceToHold;
+        diceToHold = evaluators[de].DiceToHold;
       }
-      scores[de] = PositionEvaluator.Instances[de].CalculateScore(dice);
+      scores[de] = evaluators[de].CalculateScore(dice);
     }
   }
 

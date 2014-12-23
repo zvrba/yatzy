@@ -20,11 +20,13 @@ namespace Yatzy
     /// <summary>
     /// Constructor accepting a validity criterion.  The criterion cannot be changed after construction.
     /// </summary>
-    /// <param name="isStateValid">Validity criterion delegate.  If null, every state is accepted.</param>
+    /// <param name="isStateValid">Validity criterion delegate.
+    /// If null, every state is accepted.</param>
+    /// <remarks>Does NOT initialize the state to a valid state.
+    /// <c>First()</c> must be called explicitly even after construction.</remarks>
     public EnumeratingDice(Func<DiceState, bool> isStateValid) {
       if (isStateValid != null) this.isStateValid = isStateValid;
       else this.isStateValid = (state) => true;
-      First();
     }
 
     public void First() {
