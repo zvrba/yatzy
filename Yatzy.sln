@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulation", "Simulation\Simulation.csproj", "{C5559CF0-39D4-4F02-A4AB-FA0214E4E021}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelYatzy", "ExcelYatzy\ExcelYatzy.csproj", "{91E9ED04-1474-47E1-B46A-3A05FB183741}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C5559CF0-39D4-4F02-A4AB-FA0214E4E021}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5559CF0-39D4-4F02-A4AB-FA0214E4E021}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5559CF0-39D4-4F02-A4AB-FA0214E4E021}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91E9ED04-1474-47E1-B46A-3A05FB183741}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91E9ED04-1474-47E1-B46A-3A05FB183741}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91E9ED04-1474-47E1-B46A-3A05FB183741}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91E9ED04-1474-47E1-B46A-3A05FB183741}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
