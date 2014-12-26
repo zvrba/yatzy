@@ -13,36 +13,32 @@ using Yatzy;
 
 namespace ExcelYatzy
 {
-    public partial class ThisWorkbook
-    {
-        private void ThisWorkbook_Startup(object sender, System.EventArgs e)
-        {
-          var ev = PositionEvaluator.CreateInstances();
-          this.Sheets[0].
-        }
+  public partial class ThisWorkbook
+  {
+    public static void FillRow(dynamic sheet, int row, int column, IEnumerable<object> data) {
+      //var sheet = this.Worksheets[sheetName];
+      foreach (var elt in data)
+        sheet.Cells[row, column++] = elt;
+    }
 
-        private void ThisWorkbook_Shutdown(object sender, System.EventArgs e)
-        {
-        }
+    private void ThisWorkbook_Startup(object sender, System.EventArgs e) {
+    }
 
-        #region VSTO Designer generated code
+    private void ThisWorkbook_Shutdown(object sender, System.EventArgs e) {
+    }
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InternalStartup()
-        {
-          this.Startup += new System.EventHandler(this.ThisWorkbook_Startup);
-          this.Shutdown += new System.EventHandler(this.ThisWorkbook_Shutdown);
+    #region VSTO Designer generated code
 
-        }
-
-        #endregion
-
-        private void toolTip1_Popup(object sender, PopupEventArgs e) {
-
-        }
+    /// <summary>
+    /// Required method for Designer support - do not modify
+    /// the contents of this method with the code editor.
+    /// </summary>
+    private void InternalStartup() {
+      this.Startup += new System.EventHandler(this.ThisWorkbook_Startup);
+      this.Shutdown += new System.EventHandler(this.ThisWorkbook_Shutdown);
 
     }
+
+    #endregion
+  }
 }

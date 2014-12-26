@@ -15,7 +15,7 @@ namespace ExcelYatzy {
     /// 
     [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(2)]
     [global::System.Security.Permissions.PermissionSetAttribute(global::System.Security.Permissions.SecurityAction.Demand, Name="FullTrust")]
-    public sealed partial class SimResults : Microsoft.Office.Tools.Excel.WorksheetBase {
+    public sealed partial class SimData : Microsoft.Office.Tools.Excel.WorksheetBase {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         private global::System.Object missing = global::System.Type.Missing;
@@ -23,7 +23,7 @@ namespace ExcelYatzy {
         /// 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
-        public SimResults(global::Microsoft.Office.Tools.Excel.Factory factory, global::System.IServiceProvider serviceProvider) : 
+        public SimData(global::Microsoft.Office.Tools.Excel.Factory factory, global::System.IServiceProvider serviceProvider) : 
                 base(factory, serviceProvider, "Sheet2", "Sheet2") {
         }
         
@@ -33,7 +33,7 @@ namespace ExcelYatzy {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         protected override void Initialize() {
             base.Initialize();
-            Globals.SimResults = this;
+            Globals.SimData = this;
             global::System.Windows.Forms.Application.EnableVisualStyles();
             this.InitializeCachedData();
             this.InitializeControls();
@@ -148,15 +148,15 @@ namespace ExcelYatzy {
     
     internal sealed partial class Globals {
         
-        private static SimResults _SimResults;
+        private static SimData _SimData;
         
-        internal static SimResults SimResults {
+        internal static SimData SimData {
             get {
-                return _SimResults;
+                return _SimData;
             }
             set {
-                if ((_SimResults == null)) {
-                    _SimResults = value;
+                if ((_SimData == null)) {
+                    _SimData = value;
                 }
                 else {
                     throw new System.NotSupportedException();

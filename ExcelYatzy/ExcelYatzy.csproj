@@ -16,6 +16,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <BootstrapperComponentsLocation>HomeSite</BootstrapperComponentsLocation>
     <ProjectGuid>{91E9ED04-1474-47E1-B46A-3A05FB183741}</ProjectGuid>
+    <SolutionID>a00fcef1-8b61-4b25-b740-0cc103ce6b74</SolutionID>
   </PropertyGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -108,11 +109,11 @@
     <Compile Include="Overview.Designer.cs">
       <DependentUpon>Overview.Designer.xml</DependentUpon>
     </Compile>
-    <Compile Include="SimResults.cs">
+    <Compile Include="SimData.cs">
       <DependentUpon>ExcelYatzy.xlsx</DependentUpon>
     </Compile>
-    <Compile Include="SimResults.Designer.cs">
-      <DependentUpon>SimResults.Designer.xml</DependentUpon>
+    <Compile Include="SimData.Designer.cs">
+      <DependentUpon>SimData.Designer.xml</DependentUpon>
     </Compile>
     <Compile Include="ThisWorkbook.cs">
       <DependentUpon>ExcelYatzy.xlsx</DependentUpon>
@@ -133,6 +134,7 @@
       <DependentUpon>ThisWorkbook.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="ExcelYatzy.xlsx" />
+    <None Include="ExcelYatzy_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -154,8 +156,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SimResults.Designer.xml">
-      <DependentUpon>SimResults.cs</DependentUpon>
+    <None Include="SimData.Designer.xml">
+      <DependentUpon>SimData.cs</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +170,15 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ExcelYatzy_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>13DA05CCBCF4787710B3E4CB7171AAF8CCAF9073</ManifestCertificateThumbprint>
+  </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\OfficeTools\Microsoft.VisualStudio.Tools.Office.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>
@@ -176,7 +187,7 @@
         <ProjectProperties HostName="ExcelYatzy.xlsx" HostPackage="{3F2B7691-D1D1-402F-9370-2704A737CF60}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="XLS" Language="CS" TemplatesPath="VSTOTemplates" DebugInfoExeName="C:\Program Files\Microsoft Office 15\root\Office15\Excel.exe" DebugInfoCommandLine="/x &quot;[$OUTPUT]ExcelYatzy.xlsx&quot;" />
         <Host Name="Excel Document" Path=".\ExcelYatzy.xlsx" GeneratedCodeNamespace="ExcelYatzy">
           <HostItem Name="Sheet1" Code="Overview.cs" CanonicalName="Sheet1" DisplayName="Overview" Blueprint="Overview.Designer.xml" GeneratedCode="Overview.Designer.cs" />
-          <HostItem Name="Sheet2" Code="SimResults.cs" CanonicalName="Sheet2" DisplayName="SimResults" Blueprint="SimResults.Designer.xml" GeneratedCode="SimResults.Designer.cs" />
+          <HostItem Name="Sheet2" Code="SimData.cs" CanonicalName="Sheet2" DisplayName="SimData" Blueprint="SimData.Designer.xml" GeneratedCode="SimData.Designer.cs" />
           <HostItem Name="ThisWorkbook" Code="ThisWorkbook.cs" CanonicalName="ThisWorkbook" Blueprint="ThisWorkbook.Designer.xml" GeneratedCode="ThisWorkbook.Designer.cs" />
         </Host>
       </FlavorProperties>
