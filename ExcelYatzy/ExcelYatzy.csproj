@@ -109,6 +109,12 @@
     <Compile Include="Overview.Designer.cs">
       <DependentUpon>Overview.Designer.xml</DependentUpon>
     </Compile>
+    <Compile Include="RefData.cs">
+      <DependentUpon>ExcelYatzy.xlsx</DependentUpon>
+    </Compile>
+    <Compile Include="RefData.Designer.cs">
+      <DependentUpon>RefData.Designer.xml</DependentUpon>
+    </Compile>
     <Compile Include="SimData.cs">
       <DependentUpon>ExcelYatzy.xlsx</DependentUpon>
     </Compile>
@@ -166,6 +172,11 @@
       <Name>Yatzy</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="RefData.Designer.xml">
+      <DependentUpon>RefData.cs</DependentUpon>
+    </None>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -187,6 +198,7 @@
         <ProjectProperties HostName="ExcelYatzy.xlsx" HostPackage="{3F2B7691-D1D1-402F-9370-2704A737CF60}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="XLS" Language="CS" TemplatesPath="VSTOTemplates" DebugInfoExeName="C:\Program Files\Microsoft Office 15\root\Office15\Excel.exe" DebugInfoCommandLine="/x &quot;[$OUTPUT]ExcelYatzy.xlsx&quot;" />
         <Host Name="Excel Document" Path=".\ExcelYatzy.xlsx" GeneratedCodeNamespace="ExcelYatzy">
           <HostItem Name="Sheet1" Code="Overview.cs" CanonicalName="Sheet1" DisplayName="Overview" Blueprint="Overview.Designer.xml" GeneratedCode="Overview.Designer.cs" />
+          <HostItem Name="Sheet3" Code="RefData.cs" CanonicalName="Sheet3" DisplayName="RefData" Blueprint="RefData.Designer.xml" GeneratedCode="RefData.Designer.cs" />
           <HostItem Name="Sheet2" Code="SimData.cs" CanonicalName="Sheet2" DisplayName="SimData" Blueprint="SimData.Designer.xml" GeneratedCode="SimData.Designer.cs" />
           <HostItem Name="ThisWorkbook" Code="ThisWorkbook.cs" CanonicalName="ThisWorkbook" Blueprint="ThisWorkbook.Designer.xml" GeneratedCode="ThisWorkbook.Designer.cs" />
         </Host>
