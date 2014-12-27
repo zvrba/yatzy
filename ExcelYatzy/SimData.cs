@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml.Linq;
+using System.Threading.Tasks;
 using Microsoft.Office.Tools.Excel;
 using Microsoft.VisualStudio.Tools.Applications.Runtime;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -73,13 +69,29 @@ namespace ExcelYatzy
 
     // TODO! PARALLELIZATION, but with different game instances!
     void RunSimulation() {
+      int runningSeed = this.seed;
       int[,] scores = new int[count, 15];
-      var g = new ForcedRuleGame(seed);
-      for (int i = 0; i < count; ++i) {
-        g.Play();
-        for (int j = 0; j < 15; ++j)
-          scores[i, j] = g.Scores[j];
-      }
+
+      Parallel.For(
+        0, count,                                 // Limits
+        () => {                                   // Local init: return a game with different seed in each instance
+          int useSeed;
+          lock (this) {
+            runningSeed += 1597;
+            useSeed = runningSeed;
+          }
+          return new ForcedRuleGame(useSeed);
+        },
+        (i, loopControl, game) => {               // Body
+          game.Play();
+          int j = 0;
+          foreach (int score in game.Scores)
+            scores[i, j++] = score;
+          return game;                            // Pass the state to next iteration
+        },
+        (game) => { }                             // No final action on local state
+      );
+
       this.Range["A2", this.Cells[2+count-1, 15]].Value = scores;
     }
 
