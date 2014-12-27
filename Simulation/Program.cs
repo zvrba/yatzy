@@ -21,7 +21,7 @@ namespace Simulation
 
     static void PrintScores(AbstractRuleGame game) {
       var instances = PositionEvaluator.CreateInstances();
-      for (int i = 0; i < game.Scores.Count; ++i)
+      for (int i = 0; i < game.Scores.Length; ++i)
         Console.Out.WriteLine(instances[i].Name + ":" + game.Scores[i]);
     }
   }

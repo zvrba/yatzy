@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Yatzy
@@ -15,18 +13,16 @@ namespace Yatzy
   {
     private readonly RollingDice dice;
     private readonly int[] scores = new int[PositionEvaluator.Count];
-    private readonly ReadOnlyCollection<int> roScores;
     private readonly PositionEvaluator[] evaluators = PositionEvaluator.CreateInstances();
     private int bonus;
 
     protected AbstractRuleGame(int seed) {
       seed = (seed+1) * 1711; // Ensure not zero
       dice = new RollingDice(seed);
-      roScores = Array.AsReadOnly(scores);
     }
 
-    public ReadOnlyCollection<int> Scores {
-      get { return roScores; }
+    public int[] Scores {
+      get { return scores; }
     }
 
     public int Bonus {
@@ -65,7 +61,8 @@ namespace Yatzy
           evaluators[e].EvaluatePosition(dice);
 
         de = ChooseTarget(i);
-        Debug.Assert(scores[de] == -1, "target already used");
+        if (scores[de] != -1)
+          throw new ApplicationException("target already used");
         diceToHold = evaluators[de].DiceToHold;
       }
       scores[de] = evaluators[de].CalculateScore(dice);
@@ -80,8 +77,9 @@ namespace Yatzy
     public ForcedRuleGame(int seed) : base(seed) { }
 
     protected override int ChooseTarget(int throwsLeft) {
-      int i = this.Scores.IndexOf(-1);
-      Debug.Assert(i != -1, "logic error; called too many times");
+      int i = Array.IndexOf(this.Scores, -1);
+      if (this.Scores[i] != -1)
+        throw new ApplicationException("logic error; called too many times");
       return i;
     }
   }
