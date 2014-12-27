@@ -14,8 +14,11 @@ namespace Yatzy
   {
     private const int N = 5;
     private const int K = 6;
-    private readonly CompositionGenerator generator = new CompositionGenerator(N, K);
+    private readonly List<int[]> compositions = new List<int[]>(256);
     private readonly Func<DiceState, bool> isStateValid;
+    int currentIterator;
+
+    // TODO! UNROLL ALL COMPOSITIONS INTO A LIST!
 
     /// <summary>
     /// Constructor accepting a validity criterion.  The criterion cannot be changed after construction.
@@ -27,30 +30,28 @@ namespace Yatzy
     public EnumeratingDice(Func<DiceState, bool> isStateValid) {
       if (isStateValid != null) this.isStateValid = isStateValid;
       else this.isStateValid = (state) => true;
+
+      // Generate all compositions upfront.
+      var generator = new CompositionGenerator(N, K);
+      foreach (var g in generator)
+        compositions.Add((int[])g.Clone());
     }
 
     public void First() {
-      generator.First();
-      SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
-      if (!AdvanceToValidCombination())
+      currentIterator = -1;
+      if (!Next())
         throw new ApplicationException("no valid combinations in this instance");
     }
 
 
     public bool Next() {
-      if (generator.Next() == K)
-        return false;
-      SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
-      return AdvanceToValidCombination();
-    }
-
-    private bool AdvanceToValidCombination() {
-      while (!isStateValid(this)) {
-        if (generator.Next() == K)
+      while (true) {
+        if (++currentIterator == compositions.Count)
           return false;
-        SetState((newCounts) => generator.Data.CopyTo(newCounts, 1));
+        SetState((newCounts) => compositions[currentIterator].CopyTo(newCounts, 1));
+        if (isStateValid(this))
+          return true;
       }
-      return true;
     }
 
     public IEnumerator<DiceState> GetEnumerator() {
