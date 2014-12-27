@@ -9,19 +9,16 @@ namespace Yatzy.PositionEvaluators
 {
   public abstract class FixedNumberEvaluator : PositionEvaluator
   {
-    class FixedNumberDiceState : DiceState
-    {
-      public FixedNumberDiceState(int number) {
-        SetState((newState) => newState[number] = 5);
-      }
-    }
-
     private readonly int targetNumber;
-    private readonly FixedNumberDiceState targetState;
+    private readonly DiceState targetState;
 
     protected FixedNumberEvaluator(int targetNumber) {
       this.targetNumber = targetNumber;
-      this.targetState = new FixedNumberDiceState(targetNumber);
+      this.targetState = new DiceState();
+
+      int[] targetCounts = new int[7];
+      targetCounts[targetNumber] = 5;
+      this.targetState.Counts = targetCounts;
     }
 
     public sealed override bool[] DiceToHold {

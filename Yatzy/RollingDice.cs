@@ -12,59 +12,45 @@ namespace Yatzy
   public sealed class RollingDice : DiceState
   {
     private readonly Random random;
-    private IList<bool> diceToHold;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="seed">Seed for the internal RNG.</param>
     public RollingDice(int seed) {
+      // Create the RNG and warm it up (subtractive RNG).
       random = new Random(seed);
-      // Warm it up.
       for (int i = 0; i < 256; ++i)
         random.Next();
+
+      // Must have valid state before call to Roll.
+      this.Values = new int[] { 1, 1, 1, 1, 1 };
       Roll();
     }
 
     /// <summary>
-    /// Roll the dice. Sorts the result after rolling for easier evaluation afterwards.
+    /// Roll the dice.
     /// </summary>
     /// <param name="diceToHold">
     /// Dice corresponding to false values in the array are not rolled.
     /// When null, all dice are rolled.
     /// </param>
     public void Roll(IList<bool> diceToHold = null) {
-      this.diceToHold = diceToHold;
-      SetState((newCounts) => {
-        this.Counts.CopyTo(newCounts, 0);
-        Roll(newCounts);
-      });
-    }
+      int[] counts = this.Counts;
 
-    private void Roll(int[] newCounts) {
       for (int i = 0; i < 5; ++i) {
         if (diceToHold == null || !diceToHold[i]) {
           int newValue = CastDie();
-          --newCounts[this.Values[i]];
-          ++newCounts[newValue];
+          --counts[this.Values[i]];
+          ++counts[newValue];
         }
       }
+
+      this.Counts = counts;
     }
 
     private int CastDie() {
       return 1 + random.Next(6);
-#if false
-      int result;
-
-      do {
-        result = 0;
-        for (int bit = 0; bit < 3; ++bit)
-          if ((r.Next() & 11) != 0)
-            result |= (1 << bit);
-      } while (result < 1 || result > 6);
-
-      return result;
-#endif
     }
   } 
 }

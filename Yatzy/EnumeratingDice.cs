@@ -33,8 +33,11 @@ namespace Yatzy
 
       // Generate all compositions upfront.
       var generator = new CompositionGenerator(N, K);
-      foreach (var g in generator)
-        compositions.Add((int[])g.Clone());
+      foreach (var g in generator) {
+        int[] counts = new int[7];
+        g.CopyTo(counts, 1);
+        compositions.Add(counts);
+      }
     }
 
     public void First() {
@@ -48,7 +51,7 @@ namespace Yatzy
       while (true) {
         if (++currentIterator == compositions.Count)
           return false;
-        SetState((newCounts) => compositions[currentIterator].CopyTo(newCounts, 1));
+        this.Counts = compositions[currentIterator];
         if (isStateValid(this))
           return true;
       }
