@@ -67,7 +67,6 @@ namespace ExcelYatzy
       }
     }
 
-    // TODO! PARALLELIZATION, but with different game instances!
     void RunSimulation() {
       int runningSeed = this.seed;
       int[,] scores = new int[count, 15];
