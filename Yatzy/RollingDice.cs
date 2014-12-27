@@ -20,6 +20,9 @@ namespace Yatzy
     /// <param name="seed">Seed for the internal RNG.</param>
     public RollingDice(int seed) {
       random = new Random(seed);
+      // Warm it up.
+      for (int i = 0; i < 256; ++i)
+        random.Next();
       Roll();
     }
 
