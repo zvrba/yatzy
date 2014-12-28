@@ -18,8 +18,6 @@ namespace Yatzy
     private readonly Func<DiceState, bool> isStateValid;
     int currentIterator;
 
-    // TODO! UNROLL ALL COMPOSITIONS INTO A LIST!
-
     /// <summary>
     /// Constructor accepting a validity criterion.  The criterion cannot be changed after construction.
     /// </summary>
