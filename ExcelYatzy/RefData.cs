@@ -48,11 +48,19 @@ namespace ExcelYatzy
         for (int e = 0; e < evaluators.Length; ++e) {
           int s = evaluators[e].CalculateScore(combination);
           if (s > 0)
-            ++freq[ScoreIndex(s), e];
+            freq[ScoreIndex(s), e] += Count(combination.Counts);
         }
       }
 
       return freq;
+    }
+
+    private static int[] factorial = new int[] { 1, 1, 2, 6, 24, 120 };
+    private static int Count(int[] combination) {
+      int r = 120;
+      foreach (var c in combination)
+        r /= factorial[c];
+      return r;
     }
 
     private static int ScoreIndex(int score) {
