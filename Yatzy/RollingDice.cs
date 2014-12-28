@@ -35,21 +35,17 @@ namespace Yatzy
     /// When null, all dice are rolled.
     /// </param>
     public void Roll(IList<bool> diceToHold = null) {
-      int[] counts = this.Counts;
+      int[] values = this.Values;
 
-      for (int i = 0; i < 5; ++i) {
-        if (diceToHold == null || !diceToHold[i]) {
-          int newValue = CastDie();
-          --counts[this.Values[i]];
-          ++counts[newValue];
-        }
-      }
+      for (int i = 0; i < 5; ++i)
+        if (diceToHold == null || !diceToHold[i])
+          values[i] = CastDie();
 
-      this.Counts = counts;
+      this.Values = values;
     }
 
     private int CastDie() {
-      return 1 + random.Next(6);
+      return random.Next(1, 7);
     }
   } 
 }
