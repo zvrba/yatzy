@@ -26,8 +26,8 @@ namespace Tests
         if (isEqual)
           ++equalCount;
       }
-      // It is possible that two consecutive rolls end up with the same dice configuration. Should be rare though.
-      Assert.IsTrue(equalCount < 5);
+      // Probability of rolling the same combination of two dice in a row is 0.006353238.  Check against this with a small margin.
+      Assert.IsTrue((double)equalCount / ROLL_TRIES < 0.007);
     }
 
     [TestMethod]

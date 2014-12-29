@@ -19,8 +19,12 @@ namespace ExcelYatzy
     private void Sheet3_Startup(object sender, System.EventArgs e) {
       evaluators = Yatzy.PositionEvaluator.CreateInstances();
       SetupHeaders();
+      
       var freq = CalculateFrequencies();
       this.Range["B2", "P32"].Value = freq;
+
+      var patterns = CalculatePatternFrequencies();
+      this.Range["Q2", "Q253"].Value = patterns;
     }
 
     private void Sheet3_Shutdown(object sender, System.EventArgs e) {
@@ -51,6 +55,17 @@ namespace ExcelYatzy
             freq[ScoreIndex(s), e] += Count(combination.Counts);
         }
       }
+
+      return freq;
+    }
+
+    private int[,] CalculatePatternFrequencies() {
+      var freq = new int[252,1];
+      var dice = new Yatzy.EnumeratingDice(null);
+
+      int k = 0;
+      foreach (var combination in dice)
+        freq[k++,0] = Count(combination.Counts);
 
       return freq;
     }
