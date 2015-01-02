@@ -8,27 +8,23 @@ using System.Threading.Tasks;
 namespace Yatzy
 {
   /// <summary>
-  /// Enumerate all possible configurations of dice subject to a validity criterion.
+  /// Enumerate all possible configurations of dice.  Since this is used only for position
+  /// evaluation, only unordered combinations are generated; 252 in total.  For example,
+  /// { 1, 1, 3, 4, 5 } will occur only once, even though there are 5!/2! = 60 ordered
+  /// combinations.
   /// </summary>
   public class EnumeratingDice : DiceState, IEnumerable<DiceState>
   {
     private const int N = 5;
     private const int K = 6;
     private readonly List<int[]> compositions = new List<int[]>(256);
-    private readonly Func<DiceState, bool> isStateValid;
     int currentIterator;
 
     /// <summary>
-    /// Constructor accepting a validity criterion.  The criterion cannot be changed after construction.
+    /// Constructor.  It doe NOT initialize the state to a valid state.
+    /// <c>First()</c> must be called explicitly even after construction.
     /// </summary>
-    /// <param name="isStateValid">Validity criterion delegate.
-    /// If null, every state is accepted.</param>
-    /// <remarks>Does NOT initialize the state to a valid state.
-    /// <c>First()</c> must be called explicitly even after construction.</remarks>
-    public EnumeratingDice(Func<DiceState, bool> isStateValid) {
-      if (isStateValid != null) this.isStateValid = isStateValid;
-      else this.isStateValid = (state) => true;
-
+    public EnumeratingDice() {
       // Generate all compositions upfront.
       var generator = new CompositionGenerator(N, K);
       foreach (var g in generator) {
@@ -38,21 +34,23 @@ namespace Yatzy
       }
     }
 
+    /// <summary>
+    /// Reset the dice to the very first combination.
+    /// </summary>
     public void First() {
       currentIterator = -1;
-      if (!Next())
-        throw new ApplicationException("no valid combinations in this instance");
+      Next();
     }
 
-
+    /// <summary>
+    /// Generate the next combination.
+    /// </summary>
+    /// <returns>False if all combinations have been generated (i.e., there is no next one).</returns>
     public bool Next() {
-      while (true) {
-        if (++currentIterator == compositions.Count)
-          return false;
-        this.Counts = compositions[currentIterator];
-        if (isStateValid(this))
-          return true;
-      }
+      if (++currentIterator == compositions.Count)
+        return false;
+      this.Counts = compositions[currentIterator];
+      return true;
     }
 
     public IEnumerator<DiceState> GetEnumerator() {

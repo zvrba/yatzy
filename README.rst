@@ -38,6 +38,7 @@ Yatzy
 As the Git history shows, I've had a lot of refactorings and design changes.
 
 - EnumeratingDice: didn't need validity criterion
+- has to pregenerate combinations
 
   /// <remarks>
   /// This design decision is a tradeoff towards performance because it avoids copying of the

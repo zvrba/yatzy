@@ -11,7 +11,7 @@ namespace Tests
   {
     [TestMethod]
     public void All_Compositions_Enumerated_Manual() {
-      var dice = new EnumeratingDice(null);
+      var dice = new EnumeratingDice();
 
       dice.First();
       int count = 1;
@@ -23,7 +23,7 @@ namespace Tests
 
     [TestMethod]
     public void All_Compositions_Enumerated_Foreach() {
-      var dice = new EnumeratingDice(null);
+      var dice = new EnumeratingDice();
       int count = 0;
       foreach (var state in dice)
         ++count;

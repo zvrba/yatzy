@@ -10,7 +10,7 @@ namespace Simulation
     static void Main(string[] args) {
       int seed = Environment.TickCount;
 
-      Parallel.For(0, 300, (i) => {
+      Parallel.For(0, 1000, (i) => {
         int thisSeed = Interlocked.Add(ref seed, 17);
         var game = new ForcedRuleGame(thisSeed);
         game.Play();

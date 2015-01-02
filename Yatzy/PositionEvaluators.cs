@@ -54,15 +54,11 @@ namespace Yatzy.PositionEvaluators
   /// </summary>
   public abstract class GreedyPatternEvaluator : PositionEvaluator
   {
-    private EnumeratingDice dice;
+    private EnumeratingDice dice = new EnumeratingDice();
     private int[] counts = new int[7];
     private bool[] diceToHold = new bool[5];
     private int distance;
     private int score;
-
-    protected GreedyPatternEvaluator() {
-      dice = new EnumeratingDice((state) => { return this.CalculateScore(dice) > 0; });
-    }
 
     public sealed override bool[] DiceToHold {
       get { return diceToHold; }
@@ -78,6 +74,8 @@ namespace Yatzy.PositionEvaluators
 
     public sealed override void EvaluatePosition(DiceState dice) {
       distance = 100;
+      score = 0;
+
       foreach (var state in this.dice) {
         comparer.Compare(dice, this.dice);
         RememberStateIfBetter();
@@ -86,10 +84,10 @@ namespace Yatzy.PositionEvaluators
 
     private void RememberStateIfBetter() {
       int tryScore = CalculateScore(this.dice);
-      bool shouldRemember = (comparer.Distance < distance) ||
+      bool isBetter = (comparer.Distance < distance) ||
         (comparer.Distance == distance && tryScore > score);
 
-      if (shouldRemember) {
+      if (isBetter && (tryScore > 0)) {
         distance = comparer.Distance;
         score = tryScore;
         comparer.DiceToHold.CopyTo(diceToHold, 0);

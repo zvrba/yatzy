@@ -46,7 +46,7 @@ namespace ExcelYatzy
 
     private int[,] CalculateFrequencies() {
       var freq = new int[31, evaluators.Length];
-      var dice = new Yatzy.EnumeratingDice(null);
+      var dice = new Yatzy.EnumeratingDice();
 
       foreach (var combination in dice) {
         for (int e = 0; e < evaluators.Length; ++e) {
@@ -61,7 +61,7 @@ namespace ExcelYatzy
 
     private int[,] CalculatePatternFrequencies() {
       var freq = new int[252,1];
-      var dice = new Yatzy.EnumeratingDice(null);
+      var dice = new Yatzy.EnumeratingDice();
 
       int k = 0;
       foreach (var combination in dice)

@@ -9,7 +9,7 @@ namespace Yatzy
 {
   /// <summary>
   /// This class enumerates all possible compositions of n into at most k parts, i.e.,
-  /// it enumerates all ordered tuples (x0,..,x5) such that x0 + ... + xk = n and 0 <= xi <= n.
+  /// it enumerates all ordered tuples (x0,..,x5) such that <c>x0 + ... + xk = n</c> and <c>0 &lt;= xi &lt;= n</c>.
   /// For more details, see "FXT book", chapter 7, on compositions.
   /// </summary>
   public class CompositionGenerator : IEnumerable<int[]>
