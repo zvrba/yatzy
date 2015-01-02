@@ -7,11 +7,18 @@ using System.Threading.Tasks;
 
 namespace Yatzy.PositionEvaluators
 {
+  /// <summary>
+  /// Specialization for evaluating fixed-number patterns.
+  /// </summary>
   public abstract class FixedNumberEvaluator : PositionEvaluator
   {
     private readonly int targetNumber;
     private readonly DiceState targetState;
 
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="targetNumber">The number considered in the target pattern (1 to 6).</param>
     protected FixedNumberEvaluator(int targetNumber) {
       this.targetNumber = targetNumber;
       this.targetState = new DiceState();
@@ -43,8 +50,7 @@ namespace Yatzy.PositionEvaluators
   }
  
   /// <summary>
-  /// Greedy pattern evaluator tries to first minimize the probability of zero score, and then
-  /// to maximize the score.
+  /// Greedy pattern evaluator tries to first minimize the probability of zero score, and then to maximize the score.
   /// </summary>
   public abstract class GreedyPatternEvaluator : PositionEvaluator
   {

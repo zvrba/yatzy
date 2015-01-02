@@ -16,19 +16,33 @@ namespace Yatzy
     private readonly PositionEvaluator[] evaluators = PositionEvaluator.CreateInstances();
     private int bonus;
 
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="seed">This is used to initialize the internal RNG.</param>
     protected AbstractRuleGame(int seed) {
       seed = (seed+1) * 1711; // Ensure not zero
       dice = new RollingDice(seed);
     }
 
+    /// <summary>
+    /// This array contains the score for each possible dice pattern.
+    /// Elements are set to -1 before each game play.
+    /// </summary>
     public int[] Scores {
       get { return scores; }
     }
 
+    /// <summary>
+    /// Returns the achieved bonus.
+    /// </summary>
     public int Bonus {
       get { return bonus; }
     }
 
+    /// <summary>
+    /// Simulates one whole game (15 rounds).
+    /// </summary>
     public void Play() {
       ResetScores();
       for (int round = 0; round < evaluators.Length; ++round)
@@ -36,6 +50,11 @@ namespace Yatzy
       SetBonus();
     }
 
+    /// <summary>
+    /// Find the best pattern candidate to aim for in the next throw.
+    /// </summary>
+    /// <param name="throwsLeft">Number of throws left in the current round.</param>
+    /// <returns>The index of the pattern to aim for.  Its score must be -1.</returns>
     protected abstract int ChooseTarget(int throwsLeft);
 
     private void ResetScores() {
@@ -70,7 +89,7 @@ namespace Yatzy
   }
 
   /// <summary>
-  /// Play in forced order, i.e., as written on the scoring card.
+  /// Implements the gameplay according to forced rules.
   /// </summary>
   public sealed class ForcedRuleGame : AbstractRuleGame
   {

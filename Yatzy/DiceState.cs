@@ -8,7 +8,7 @@ namespace Yatzy
   /// <summary>
   /// Class which exposes dice state as either counts or values. Counts and values
   /// are *not* recomputed if the underlying array changes.  Setting Counts or Values
-  /// to the *same* array reference will invalidate the "other" part of the state.
+  /// to the *same* array reference will invalidate the mirrored part of the state.
   /// This allows to reuse the same array for state modification.
   /// </summary>
   public class DiceState

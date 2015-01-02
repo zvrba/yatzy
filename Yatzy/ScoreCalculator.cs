@@ -5,14 +5,22 @@ using System.Linq;
 
 namespace Yatzy
 {
+  /// <summary>
+  /// Implements static methods for scoring particular patterns.  The names are mostly self-describing.
+  /// </summary>
   static class ScoreCalculator
   {
-    // Covers Ones, Twos, ..., Sixes
+    /// <summary>
+    /// This method covers ones, twos, ..., sixes.
+    /// </summary>
     public static int FixedNumber(DiceState dice, int number) {
       return dice.Counts[number] * number;
     }
 
-    // Covers OnePair, ThreeOfAKind, FourOfAKind
+    /// <summary>
+    /// Covers one pair, 3 and 4 of a kind.  If there are multiple possibilities for one pair,
+    /// the highest-scoring one is considered.
+    /// </summary>
     public static int NOfAKind(DiceState dice, int count) {
       // Iterating in descending order will return highest score for OnePair (if multiple matches)
       for (int i = 6; i >= 1; --i)

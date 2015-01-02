@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace Yatzy
 {
   /// <summary>
-  /// Evaluates a given position and sets own state to the most favorable outcome achievable
-  /// from the evaluated position.  Additional attributes are exposed for directing gameplay:
-  /// <c>DiceToHold</c>, <c>Distance</c> and <c></c>
+  /// Abstract position evaluator.  Given a position, sets its public properties to the
+  /// most favorable outcome achievable from the evaluated position.
+  /// NB! Concrete instances are unsynchronized and stateful!
   /// </summary>
   public abstract class PositionEvaluator
   {
@@ -32,6 +32,9 @@ namespace Yatzy
     public const int Count = 15;
     #endregion
 
+    /// <summary>
+    /// Create particular instances of evaluators and return them.
+    /// </summary>
     public static PositionEvaluator[] CreateInstances() {
       return new PositionEvaluator[] {
         new Yatzy.PositionEvaluators.Ones(),

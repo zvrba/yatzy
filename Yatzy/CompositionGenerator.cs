@@ -10,24 +10,16 @@ namespace Yatzy
   /// <summary>
   /// This class enumerates all possible compositions of n into at most k parts, i.e.,
   /// it enumerates all ordered tuples (x0,..,x5) such that x0 + ... + xk = n and 0 <= xi <= n.
+  /// For more details, see "FXT book", chapter 7, on compositions.
   /// </summary>
-  /// <remarks>
-  /// <para>See "FXT book", chapter 7, on compositions.</para>
-  /// <para>
-  /// The returned array is a part of the generator's internal state and modifying it will
-  /// cause the generator to malfunction.
-  /// </para>
-  /// <para>
-  /// This design decision is a tradeoff towards performance because it avoids copying of the
-  /// result or returning RO wrappers around arrays. Another possibility would be for this
-  /// class to be able to use a state-vector provided by the user.
-  /// </para>
-  /// </remarks>
   public class CompositionGenerator : IEnumerable<int[]>
   {
     private readonly int n, k;
     private readonly int[] x;
 
+    /// <summary>
+    /// Constructor. See the class description for details.
+    /// </summary>
     public CompositionGenerator(int n, int k) {
       if (n < 1 || k < 1)
         throw new ArgumentException("invalid arguments");
@@ -37,16 +29,29 @@ namespace Yatzy
       this.x = new int[k];
     }
 
+    /// <summary>
+    /// Return the current composition. This is used in conjunction with <c>First</c> and <c>Next</c> methods.
+    /// </summary>
+    /// <remarks>
+    /// The returned array is a part of the generator's internal state; modifying it will cause the generator to malfunction.
+    /// </remarks>
     public int[] Data {
       get { return x; }
     }
 
+    /// <summary>
+    /// Set the class state to the first composition.
+    /// </summary>
     public void First() {
       x[0] = n;
       for (int k = 1; k < this.k; ++k)
         x[k] = 0;
     }
 
+    /// <summary>
+    /// Generate the next composition.
+    /// </summary>
+    /// <returns>The highest index which got changed.  When no more combinations are available, <c>k</c> is returned.</returns>
     public int Next() {
       int j = 0;
 
@@ -62,6 +67,9 @@ namespace Yatzy
       return j;
     }
 
+    /// <summary>
+    /// Get an IEnumerator for this class.
+    /// </summary>
     public IEnumerator<int[]> GetEnumerator() {
       First();
       do {

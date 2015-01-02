@@ -7,7 +7,7 @@ namespace Yatzy
 {
   /// <summary>
   /// Compare two dice configurations wrt. the number of transitions needed from the one state
-  /// to the other, as well as creating a mask of the dice which should be changed.
+  /// to the other, as well as creating a mask of the dice which should be held.
   /// </summary>
   public class DiceStateComparer
   {
@@ -16,7 +16,7 @@ namespace Yatzy
     private DiceState from, to;
 
     /// <summary>
-    /// Dice to hold in the next roll, computed wrt the actual dice state given to <see cref="Compare"/>.
+    /// Dice to hold in the next roll, computed wrt the actual dice state given to <c>Compare</c>.
     /// </summary>
     public bool[] DiceToHold {
       get { return diceToHold; }
@@ -24,14 +24,15 @@ namespace Yatzy
 
     /// <summary>
     /// Distance between the two states is the number of mismatching dice, i.e., the number of dice
-    /// that absolutely must be rolled to attempt to get from the source to the target state.
+    /// which must be rolled to attempt to get from the source to the target state.
     /// </summary>
     public int Distance {
       get { return distance; }
     }
 
     /// <summary>
-    /// Compare two states. NB! Arguments are not symmetric!
+    /// Compare two states.  The results of comparison are returned in <c>DiceToHold</c> and <c>Distance</c> properties.
+    /// NB! The arguments are not symmetric!
     /// </summary>
     /// <param name="from">Starting position (actual state of dice).</param>
     /// <param name="to">Desired position.</param>

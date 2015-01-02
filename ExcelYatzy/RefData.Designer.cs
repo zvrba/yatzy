@@ -13,7 +13,7 @@ namespace ExcelYatzy {
     
     
     /// 
-    [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(3)]
+    [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(2)]
     [global::System.Security.Permissions.PermissionSetAttribute(global::System.Security.Permissions.SecurityAction.Demand, Name="FullTrust")]
     public sealed partial class RefData : Microsoft.Office.Tools.Excel.WorksheetBase {
         
