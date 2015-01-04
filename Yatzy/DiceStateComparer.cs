@@ -37,33 +37,24 @@ namespace Yatzy
     /// <param name="from">Starting position (actual state of dice).</param>
     /// <param name="to">Desired position.</param>
     public void Compare(DiceState from, DiceState to) {
+
       this.from = from;
       this.to = to;
+      this.distance = 0;
 
-      CalculateDistance();
-      CalculateDiceToHold();
-
-      Debug.Assert(distance >= 0 && distance <= 5);
-      Debug.Assert(distance == diceToHold.Count(x => x == false));
-    }
-
-    private void CalculateDistance() {
-      int d = 0;
-      for (int v = 1; v < 7; ++v)
-        d += Math.Abs(from.Counts[v] - to.Counts[v]);
-      distance = d/2;
-    }
-
-    // We need to hold on to those dice whose count is smaller than in the target state.
-    private void CalculateDiceToHold() {
       for (int i = 0; i < 5; ++i)
         diceToHold[i] = true;
 
       for (int v = 1; v < 7; ++v) {
         int d = from.Counts[v] - to.Counts[v];
-        if (d > 0)
+        if (d > 0) {
+          this.distance += d;
           ClearHoldForValue(v, d);
+        }
       }
+
+      Debug.Assert(distance >= 0 && distance <= 5);
+      Debug.Assert(distance == diceToHold.Count(x => x == false));
     }
 
     // Clear the value when count > target count, but clear only the excess
